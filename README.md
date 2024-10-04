@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Celebra
 
-## Getting Started
+Celebra é um SaaS projetado para facilitar a criação e o gerenciamento de eventos, inicialmente focado em aniversários, mas com possibilidade de expansão para outros tipos de eventos. O objetivo é oferecer uma plataforma intuitiva e prática que permita aos usuários organizarem suas celebrações de forma eficiente e divertida.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Criação de Eventos**: Os usuários podem criar eventos facilmente através de um formulário simples. É possível incluir informações como nome do evento, data, horário, local e descrição.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Gerenciamento de Convidados**: A plataforma permite que os usuários adicionem convidados e gerenciem a lista de presença, com funcionalidades para acompanhar quem confirmou presença e quem não pôde comparecer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Personalização de Convites**: Os convites podem ser personalizados para refletir o tema e a estética do evento. Isso inclui a opção de editar a página do evento, permitindo que os usuários adicionem imagens, textos e estilos de sua escolha.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Modelo de Monetização**:
 
-## Learn More
+  - O serviço será oferecido em um modelo de pagamento por evento, eliminando a necessidade de mensalidades.
+  - Os usuários poderão criar até três eventos gratuitamente. Após isso, será cobrada uma taxa por evento criado, permitindo que o usuário escolha a quantidade de eventos a serem realizados conforme a sua necessidade.
 
-To learn more about Next.js, take a look at the following resources:
+- **Integração com Stripe**: O processamento de pagamentos será realizado através da integração com o Stripe, garantindo uma experiência de pagamento segura e eficiente para eventos pagos.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Interface Intuitiva**: O design da plataforma será responsivo e adaptável a diferentes dispositivos, facilitando a criação de eventos em qualquer lugar e a qualquer momento.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tecnologias Utilizadas
 
-## Deploy on Vercel
+- **Next.js**
+- **Tailwind CSS**
+- **Firebase**
+- **Stripe**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Celebra é a solução perfeita para quem deseja organizar eventos de forma descomplicada e divertida. Venha celebrar com a gente!
