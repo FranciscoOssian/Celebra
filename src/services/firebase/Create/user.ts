@@ -38,7 +38,7 @@ export default async function createUser(userData: CreateUserType) {
       uid = userCredential.user.uid;
     } catch (error) {
       console.error("Error creating user with email:", error);
-      throw new Error("User registration with email failed.");
+      throw error;
     }
   }
   // Registro com Google
@@ -48,7 +48,7 @@ export default async function createUser(userData: CreateUserType) {
       uid = userCredential.user.uid;
     } catch (error) {
       console.error("Error signing in with Google:", error);
-      throw new Error("User registration with Google failed.");
+      throw error;
     }
   }
 

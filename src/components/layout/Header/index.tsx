@@ -5,6 +5,8 @@ import { useState } from "react";
 import Avatar from "@/components/common/Avatar";
 import useUser from "@/services/firebase/Hooks/useUser";
 import { useRouter } from "next/navigation";
+import { getAuth, signOut } from "firebase/auth";
+import { app } from "@/services/firebase/firebase";
 
 const Menu = ({
   className,
@@ -39,7 +41,7 @@ const Menu = ({
           </a>
           <Button
             onClick={() => {
-              router.push("/auth/register");
+              router.push("/auth/signin");
               onClick();
             }}
             className="bg-[#001122] text-white rounded-md px-4 py-2 hover:bg-[#002244] transition duration-300"
@@ -48,7 +50,7 @@ const Menu = ({
           </Button>
           <Button
             onClick={() => {
-              router.push("/auth/register");
+              router.push("/auth/signup");
               onClick();
             }}
             className="bg-[#00bfff] text-white rounded-md px-4 py-2 hover:bg-[#0099cc] transition duration-300"
@@ -72,7 +74,19 @@ const Menu = ({
           >
             Perfil
           </a>
-          <Avatar alt="" size={40} src={avatar} />
+          {avatar && <Avatar alt="" size={40} src={avatar} />}
+          {!avatar && (
+            <div className="size-10 select-none bg-slate-800 rounded-full flex justify-center items-center">
+              👤
+            </div>
+          )}
+          <a
+            onClick={() => signOut(getAuth(app))}
+            href="/"
+            className="text-gray-700 mouse-pointer hover:text-[#00bfff]"
+          >
+            Sair
+          </a>
         </>
       )}
     </nav>

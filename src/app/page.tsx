@@ -65,7 +65,7 @@ export default function Home() {
           forma descomplicada e divertida. Venha celebrar com a gente!
         </h2>
         <Button
-          href="/auth/register"
+          href="/auth/signin"
           className="mt-6 bg-[#00bfff] text-white rounded-md px-4 py-2 hover:bg-[#0099cc] transition duration-300"
         >
           Get Started
