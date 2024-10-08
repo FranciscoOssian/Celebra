@@ -7,17 +7,17 @@ const Avatar = ({
 }: {
   src: string;
   alt: string;
-  size: number;
+  size?: number;
 }) => {
   return (
-    <div className={`w-${size} h-${size} rounded-full overflow-hidden`}>
-      <Image
-        src={src}
-        alt={alt}
-        width={size}
-        height={size}
-        className="object-cover w-full h-full"
-      />
+    <div
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+      }}
+      className="relative rounded-full overflow-hidden"
+    >
+      <Image src={src} alt={alt} fill style={{ objectFit: "cover" }} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+import s from "firebase-admin/storage";
 
 //const jsonString = JSON.stringify(serviceAccount);
 //const base64String = Buffer.from(jsonString).toString("base64");
@@ -25,4 +26,5 @@ if (!admin.apps.length) {
   });
 }
 
+export const storage = s;
 export default admin;

@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Suas configurações do Firebase
 const firebaseConfig = {
@@ -16,3 +17,4 @@ export const app = !getApps().length
   ? initializeApp(firebaseConfig)
   : getApps()[0];
 export const db = getFirestore(app);
+export const storage = getStorage(app);

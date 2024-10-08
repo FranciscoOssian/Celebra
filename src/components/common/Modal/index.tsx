@@ -25,7 +25,7 @@ export default function Modal({
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center"
+      className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center !will-change-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -33,7 +33,7 @@ export default function Modal({
     >
       {/* Modal para mobile (de baixo para cima) */}
       <motion.div
-        className={`${className}`}
+        className={`${className} !will-change-auto`}
         initial={{ y: "100%", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}

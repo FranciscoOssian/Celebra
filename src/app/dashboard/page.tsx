@@ -7,7 +7,9 @@ import useUserEvents from "@/services/firebase/Hooks/useEvents";
 import { motion } from "framer-motion";
 import { QueueListIcon, TableCellsIcon } from "@heroicons/react/16/solid";
 import Modal from "@/components/common/Modal";
-import EventForm from "@/components/pages/dashboard/EventForm";
+import EventForm, {
+  EventFormType,
+} from "@/components/pages/dashboard/EventForm";
 import Link from "next/link";
 import Image from "next/image";
 import useDeviceType from "@/hooks/useDeviceType";
@@ -31,15 +33,31 @@ export default function DashboardPage() {
     else setViewMode("list");
   }, [deviceType, events]);
 
-  const handleCreateEvent = async (eventData: unknown) => {
+  const handleCreateEvent = async (eventData: EventFormType) => {
     const tokenId = await auth?.currentUser?.getIdToken();
+
+    // Crie uma nova instância de FormData
+    const formData = new FormData();
+
+    // Adicione o tokenId ao FormData
+    formData.append("tokenId", tokenId ?? "");
+
+    // Adicione o objeto eventData ao FormData como uma string JSON
+    formData.append(
+      "event",
+      JSON.stringify({ ...eventData, creatorId: user?.uid })
+    );
+
+    // Se houver um arquivo, adicione também ao FormData
+    const file = eventData.eventFileHero;
+    if (file) {
+      formData.append("file", file); // Supondo que 'file' é um objeto do tipo File
+    }
+
+    // Envie a requisição usando fetch
     const response = await fetch("/api/createEvent", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        tokenId: tokenId,
-        event: eventData,
-      }),
+      body: formData, // Use formData diretamente
     });
 
     const result = await response.json();
@@ -70,7 +88,7 @@ export default function DashboardPage() {
         </h1>
         <SlideButton
           onClick={async () => {
-            if (user.events.length >= 3) {
+            if ((user?.events?.length ?? 0) >= 3) {
               alert("limite de eventos atingido");
             } else {
               setIsModalOpen(true);

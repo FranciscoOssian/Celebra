@@ -128,27 +128,30 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-10">
-      <div className="container mx-auto flex justify-between items-center p-4">
-        <div className="text-3xl font-bold text-[#001122]">
-          <a href="/">Celebra</a>
+    <>
+      <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-10">
+        <div className="container mx-auto flex justify-between items-center p-4">
+          <div className="text-3xl font-bold text-[#001122]">
+            <a href="/">Celebra</a>
+          </div>
+          <MenuButton toggleMenu={toggleMenu} />
+          <Menu
+            onClick={toggleMenu}
+            className="hidden md:flex gap-6"
+            isLoggedIn={!!user.uid}
+            avatar={user.photoURL ?? ""}
+          />
         </div>
-        <MenuButton toggleMenu={toggleMenu} />
         <Menu
           onClick={toggleMenu}
-          className="hidden md:flex gap-6"
+          className={`md:hidden ${
+            isOpen ? "block" : "hidden"
+          } flex !justify-start !items-start gap-8 flex-col p-4 w-1/2 h-[100vh]`}
           isLoggedIn={!!user.uid}
           avatar={user.photoURL ?? ""}
         />
-      </div>
-      <Menu
-        onClick={toggleMenu}
-        className={`md:hidden ${
-          isOpen ? "block" : "hidden"
-        } flex !justify-start !items-start gap-8 flex-col p-4 w-1/2 h-[100vh]`}
-        isLoggedIn={!!user.uid}
-        avatar={user.photoURL ?? ""}
-      />
-    </header>
+      </header>
+      <div className="h-[68px]"></div>
+    </>
   );
 }

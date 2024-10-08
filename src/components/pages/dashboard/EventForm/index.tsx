@@ -1,4 +1,13 @@
 import { useState } from "react";
+import Image from "next/image";
+
+export interface EventFormType {
+  name: string;
+  date: string;
+  location: string;
+  about: string;
+  eventFileHero?: File | undefined;
+}
 
 export default function EventForm({
   onSubmit,
@@ -8,26 +17,40 @@ export default function EventForm({
     date,
     location,
     about,
-  }: {
-    name: string;
-    date: string;
-    location: string;
-    about: string;
-  }) => void;
+    eventFileHero,
+  }: EventFormType) => void;
 }) {
   const [name, setName] = useState("");
   const [about, setAbout] = useState("");
   const [dateTime, setDateTime] = useState("");
   const [location, setLocation] = useState("");
+  const [eventFileHero, setEventFileHero] = useState<File | undefined>(
+    undefined
+  );
+  const [eventFileHeroPreview, setEventFileHeroPreview] = useState<
+    string | undefined
+  >(undefined);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // Aqui você passa os dados preenchidos no form para o pai
-    onSubmit({ name, date: dateTime, location, about });
+    onSubmit({ name, date: dateTime, location, about, eventFileHero });
+  };
+
+  const handleFileChange = (file: File | undefined) => {
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setEventFileHero(file);
+      setEventFileHeroPreview(imageUrl);
+    }
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    handleFileChange(file);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className={`w-full flex flex-col gap-4`}>
       <div>
         <label className="block text-sm font-medium text-gray-700">
           Nome do Evento
@@ -45,8 +68,7 @@ export default function EventForm({
         <label className="block text-sm font-medium text-gray-700">
           Sobre o Evento
         </label>
-        <input
-          type="text"
+        <textarea
           value={about}
           onChange={(e) => setAbout(e.target.value)}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -76,6 +98,34 @@ export default function EventForm({
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           required
         />
+      </div>
+
+      <div className="">
+        <label className="block text-sm font-medium text-gray-700">
+          Imagem/Vídeo de divulgação (opcional)
+        </label>
+        <input
+          type="file"
+          onChange={handleFileInput}
+          accept="image/png, image/jpeg, image/webp, video/webm, video/mp4"
+        />
+        {eventFileHeroPreview && (
+          <div className="relative w-fill h-20">
+            {eventFileHero?.type.includes("image") && (
+              <Image
+                src={eventFileHeroPreview ?? ""}
+                alt=""
+                objectFit="contain"
+                fill
+              />
+            )}
+            {eventFileHero?.type.includes("video") && (
+              <video controls className="w-full h-20">
+                <source src={eventFileHeroPreview} type="video/webm" />
+              </video>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="text-right">

@@ -1,14 +1,66 @@
-// app/api/events/route.js
 import { NextResponse } from "next/server";
-import admin from "@/services/firebaseAdmin/firebase"; // Ajuste o caminho conforme necessário
-import stripe from "@/services/stripe/stripe"; // Ajuste o caminho conforme necessário
+import { randomBytes } from "crypto";
+import admin from "@/services/firebaseAdmin/firebase";
+import stripe from "@/services/stripe/stripe";
 
 export async function GET() {
   return NextResponse.json("🤨?");
 }
 
+import { createHash } from "crypto"; // Para criar o hash MD5
+
+const upFile = async (file: FormDataEntryValue | null, eventId: string) => {
+  if (!file) return;
+
+  if (file instanceof Blob) {
+    // Função para gerar hash MD5 com o nome do arquivo e um salt
+    const generateHash = (fileName: string) => {
+      const salt = randomBytes(8).toString("hex"); // Salt para adicionar variabilidade
+      const timestamp = Date.now().toString(); // Timestamp atual
+      return (
+        createHash("md5")
+          .update(fileName + salt + timestamp) // Usar nome do arquivo, salt e timestamp para gerar o hash
+          .digest("base64")
+          .replace(/[/+=]/g, "") +
+        "." +
+        file.name.split(".")[1]
+      );
+    };
+
+    const bucket = admin.storage().bucket("gs://celebra-edbb4.appspot.com");
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
+    const fileName = file.name; // Nome original do arquivo
+    const fileHash = generateHash(fileName); // Gera o hash do nome do arquivo com o salt
+    const filePath = `Events/${eventId}/${fileHash}`; // Nome do arquivo será o hash gerado
+
+    const storageFile = bucket.file(filePath);
+
+    await storageFile.save(fileBuffer, {
+      metadata: { contentType: file.type, originalFileName: fileHash },
+    });
+
+    // Retornar apenas o hash (ID) gerado
+    return fileHash;
+  }
+};
+
 export async function POST(request: Request) {
-  const { tokenId, event } = await request.json();
+  const formData = await request.formData();
+  const file = formData.get("file");
+  const tokenId = formData.get("tokenId");
+  const event = JSON.parse(formData.get("event")?.toString() ?? "");
+
+  console.log(tokenId);
+
+  // Verifique se o tokenId não é nulo antes de usá-lo
+  if (typeof tokenId !== "string") {
+    return new Response("tokenId inválido", { status: 400 });
+  }
+
+  // Se precisar, faça o mesmo para o event
+  if (!event) {
+    return new Response("event inválido", { status: 400 });
+  }
 
   console.log(tokenId, event);
 
@@ -23,6 +75,7 @@ export async function POST(request: Request) {
     const userData = userDoc.data();
 
     const eventsRef = admin.firestore().collection("Events");
+    //const bucket = storage.getStorage().bucket().
 
     if (!userData) {
       return NextResponse.json(
@@ -31,7 +84,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const eventsCreated = (userData?.events as string[]).length || 0;
+    const eventsCreated = (userData?.events as string[])?.length || 0;
 
     console.log("o usuário tem ", eventsCreated, " eventos");
 
@@ -45,8 +98,12 @@ export async function POST(request: Request) {
       console.log(
         "ele tem < 3 eventos então poderamos criar um evento para ele sem problema"
       );
+
       const newEventDocRef = eventsRef.doc();
       await newEventDocRef.set(event);
+      await newEventDocRef.update({
+        fileHero: await upFile(file, newEventDocRef.id),
+      });
       userRef.update({
         events: [...(userData?.events ?? []), newEventDocRef.id],
       });
@@ -68,6 +125,9 @@ export async function POST(request: Request) {
         // Se o usuário já comprou eventos, pode criar mais
         const newEventDocRef = eventsRef.doc();
         await newEventDocRef.set(event);
+        await newEventDocRef.update({
+          fileHero: await upFile(file, newEventDocRef.id),
+        });
         userRef.update({
           events: [...(userData?.events ?? []), newEventDocRef.id],
         });

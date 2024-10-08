@@ -15,7 +15,7 @@ export default function Button({
     return (
       <Link href={href}>
         <div
-          className={`text-white cursor-pointer w-fit text-[14px] p-2 px-4 rounded-lg h-[36px] font-semibold text-center bg-slate-950 ${className}`}
+          className={`text-white select-none cursor-pointer w-fit text-[14px] p-2 px-4 flex justify-center items-center rounded-lg h-[36px] font-semibold text-center bg-slate-950 ${className}`}
         >
           {children}
         </div>
@@ -24,7 +24,7 @@ export default function Button({
   return (
     <div
       onClick={onClick}
-      className={`text-white cursor-pointer w-fit text-[14px] p-2 px-4 rounded-lg h-[36px] font-semibold text-center bg-slate-950 ${className}`}
+      className={`text-white select-none cursor-pointer w-fit text-[14px] p-2 px-4 flex justify-center items-center rounded-lg h-[36px] font-semibold text-center bg-slate-950 ${className}`}
     >
       {children}
     </div>
