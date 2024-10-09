@@ -26,18 +26,18 @@ import updateUser from "@/services/firebase/Update/user";
 
 const auth = getAuth(app);
 
-export const Item = ({ event }: any) => {
+export const Item = ({ event }: { [key: string]: any }) => {
   const y = useMotionValue(0);
   const [dragged, setDragged] = useState(false);
   const [startPosition, setStartPosition] = useState(0);
   const [menuVisible, setMenuVisible] = useState(false); // Estado para controlar a visibilidade do menu
 
-  const handleDragStart = (e: any) => {
+  const handleDragStart = (e: { [key: string]: any }) => {
     setDragged(true);
     setStartPosition(e.clientX || e.touches[0].clientX); // Captura a posição inicial
   };
 
-  const handleDrag = (e: any) => {
+  const handleDrag = (e: { [key: string]: any }) => {
     if (dragged) {
       const currentPosition = e.clientX || e.touches[0].clientX; // Posição atual
 
@@ -245,7 +245,9 @@ export default function DashboardPage() {
         transition={{ duration: 0.2 }}
       >
         {items.map((eventId) => {
-          const event = events.find((e: any) => e.id === eventId);
+          const event = events.find(
+            (e: { [key: string]: any }) => e.id === eventId
+          );
           return event ? <Item key={event.id} event={event} /> : null;
         })}
       </Reorder.Group>
