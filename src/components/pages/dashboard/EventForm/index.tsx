@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
+import Button from "@/components/common/Button";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 export interface EventFormType {
   name: string;
@@ -30,9 +32,11 @@ export default function EventForm({
   const [eventFileHeroPreview, setEventFileHeroPreview] = useState<
     string | undefined
   >(undefined);
+  const [started, setStarted] = useState(false);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setStarted(true);
     onSubmit({ name, date: dateTime, location, about, eventFileHero });
   };
 
@@ -128,13 +132,11 @@ export default function EventForm({
         )}
       </div>
 
-      <div className="text-right">
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Criar Evento
-        </button>
+      <div className="flex justify-end items-end">
+        <Button type="submit" className="w-32 h-6">
+          {started && <ArrowPathIcon className="size-5 animate-spin" />}
+          {!started && "Criar Evento"}
+        </Button>
       </div>
     </form>
   );
