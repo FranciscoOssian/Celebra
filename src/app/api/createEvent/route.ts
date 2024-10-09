@@ -194,7 +194,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 402 } // 402 Payment Required
     );
-  } catch (error: any) {
+  } catch (error: { [key: string]: unknown }) {
     console.error("Error in POST /api/event:", error);
 
     const status = error.status || 500;
