@@ -121,10 +121,17 @@ const DashboardPage: React.FC = () => {
         <h1 className="mb-6 text-6xl text-center font-bold tracking-tight text-[#001122]">
           Meus Eventos
         </h1>
+        {(user?.purchasedEvents ?? 0) > 0 && (
+          <div className="mb-6 text-center font-bold tracking-tight text-[#001122]">
+            Você tem {user?.purchasedEvents} evento(s) comprado(s) disponíveis
+            para criação
+          </div>
+        )}
         <SlideButton
           onClick={() => {
             if ((user?.events?.length ?? 0) >= 3) {
-              alert("Limite de eventos atingido");
+              //alert("Limite de eventos atingido");
+              setIsModalOpen(true);
             } else {
               setIsModalOpen(true);
             }
