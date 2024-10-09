@@ -130,8 +130,10 @@ const DashboardPage: React.FC = () => {
         <SlideButton
           onClick={() => {
             if ((user?.events?.length ?? 0) >= 3) {
-              //alert("Limite de eventos atingido");
-              setIsModalOpen(true);
+              alert(
+                "Limite de eventos atingido, em breve teremos opção por pagamento"
+              );
+              //setIsModalOpen(true);
             } else {
               setIsModalOpen(true);
             }
