@@ -103,8 +103,8 @@ export default function Home() {
         <PriceCard
           product="evento"
           single
-          title="Por evento"
-          price={3}
+          title="Por evento / em construção"
+          price={2}
           benefits={[
             "Gerencie quantos eventos quiser simultaneamente",
             "Crie eventos",
