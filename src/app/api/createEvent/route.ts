@@ -194,11 +194,12 @@ export async function POST(request: NextRequest) {
       },
       { status: 402 } // 402 Payment Required
     );
-  } catch (error: { [key: string]: unknown }) {
+  } catch (error: unknown) {
     console.error("Error in POST /api/event:", error);
 
-    const status = error.status || 500;
-    const message = error.message || "Internal Server Error";
+    const status = (error as { status: number }).status || 500;
+    const message =
+      (error as { message: string }).message || "Internal Server Error";
 
     return NextResponse.json({ error: message }, { status });
   }
