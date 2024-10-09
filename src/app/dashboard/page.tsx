@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import SlideButton from "@/components/pages/dashboard/SlideButton";
 import useUser from "@/services/firebase/Hooks/useUser";
 import useUserEvents from "@/services/firebase/Hooks/useEvents";
-import { motion } from "framer-motion";
-import { QueueListIcon, TableCellsIcon } from "@heroicons/react/16/solid";
+import { useMotionValue, motion } from "framer-motion";
+import {
+  QueueListIcon,
+  TableCellsIcon,
+  TrashIcon,
+} from "@heroicons/react/16/solid";
 import Modal from "@/components/common/Modal";
 import EventForm, {
   EventFormType,
@@ -15,10 +19,82 @@ import Image from "next/image";
 import useDeviceType from "@/hooks/useDeviceType";
 import { app } from "@/services/firebase/firebase";
 import { useRouter } from "next/navigation";
+import { Reorder } from "framer-motion";
 
 import { getAuth } from "firebase/auth";
+import updateUser from "@/services/firebase/Update/user";
 
 const auth = getAuth(app);
+
+export const Item = ({ event }: any) => {
+  const y = useMotionValue(0);
+  const [dragged, setDragged] = useState(false);
+  const [startPosition, setStartPosition] = useState(0);
+  const [menuVisible, setMenuVisible] = useState(false); // Estado para controlar a visibilidade do menu
+
+  const handleDragStart = (e: any) => {
+    setDragged(true);
+    setStartPosition(e.clientX || e.touches[0].clientX); // Captura a posição inicial
+  };
+
+  const handleDrag = (e: any) => {
+    if (dragged) {
+      const currentPosition = e.clientX || e.touches[0].clientX; // Posição atual
+
+      // Determine a direção do drag
+      const direction = currentPosition - startPosition;
+
+      // Verifica se arrastou para a direita
+      if (direction > 50) {
+        // Ajuste o valor conforme necessário
+        setMenuVisible(true); // Mostra o menu
+      } else if (direction < -50) {
+        // Verifica se arrastou para a esquerda
+        setMenuVisible(false); // Esconde o menu
+      }
+    }
+  };
+
+  const handleDragEnd = () => {
+    //setDragged(false);
+    //setMenuVisible(false); // Esconde o menu ao soltar
+  };
+
+  return (
+    <Reorder.Item
+      drag="x"
+      onDragStart={handleDragStart}
+      onDrag={handleDrag}
+      onDragEnd={handleDragEnd}
+      value={event.id}
+      id={event.id}
+      style={{ y, x: menuVisible ? 100 : 0 }}
+      className="w-full flex justify-center items-center relative"
+    >
+      <motion.div
+        onClick={() => ({})}
+        animate={{ scale: menuVisible ? 1 : 0 }}
+        className="w-20 h-full bg-red-600 rounded-3xl absolute -right-4 flex justify-center items-center"
+      >
+        <TrashIcon className="size-10 text-white" />
+      </motion.div>
+
+      <Link className="w-full" href={`/event/${event.id}`}>
+        <div
+          className={`bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-3xl shadow-lg w-full`}
+        >
+          <h2 className="text-xl font-semibold">{event?.name}</h2>
+          <p className="mt-2 text-sm">
+            {new Date(event.date).getDate()}/
+            {new Date(event.date).getMonth() + 1}/
+            {new Date(event.date).getFullYear()}
+          </p>
+          <p className="mt-1 text-xs text-gray-200">{event?.location}</p>
+        </div>
+      </Link>
+    </Reorder.Item>
+  );
+};
 
 export default function DashboardPage() {
   const { user } = useUser();
@@ -27,6 +103,34 @@ export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const deviceType = useDeviceType();
   const router = useRouter();
+
+  // Inicialize items como um array de IDs dos eventos
+  const [items, setItems] = useState<string[]>([]);
+
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const handleReorder = (newOrder: string[]) => {
+    if (viewMode === "grid") return;
+
+    setItems(newOrder);
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Crie um novo timeout
+    const id = setTimeout(() => {
+      updateUser(user.uid, { events: newOrder });
+    }, 2000);
+
+    setTimeoutId(id);
+  };
+
+  useEffect(() => {
+    if (events) {
+      setItems(events.map((event: any) => event.id));
+    }
+  }, [events]);
 
   useEffect(() => {
     if (deviceType === "desktop" && events.length > 1) setViewMode("grid");
@@ -89,7 +193,7 @@ export default function DashboardPage() {
         <SlideButton
           onClick={async () => {
             if ((user?.events?.length ?? 0) >= 3) {
-              alert("limite de eventos atingido");
+              alert("Limite de eventos atingido");
             } else {
               setIsModalOpen(true);
             }
@@ -126,7 +230,10 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <motion.ul
+      <Reorder.Group
+        axis="y"
+        onReorder={handleReorder}
+        values={items}
         className={`w-full ${
           viewMode === "grid" ? "grid gap-4" : "flex flex-col space-y-4"
         }`}
@@ -137,22 +244,11 @@ export default function DashboardPage() {
         }}
         transition={{ duration: 0.2 }}
       >
-        {events.map((event, i) => (
-          <li key={i} className="w-full">
-            <Link href={`/event/${event.id}`}>
-              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-3xl shadow-lg">
-                <h2 className="text-xl font-semibold">{event?.name}</h2>
-                <p className="mt-2 text-sm">
-                  {new Date(event.date).getDay() - 1}/
-                  {new Date(event.date).getMonth()}/
-                  {new Date(event.date).getFullYear()}
-                </p>
-                <p className="mt-1 text-xs text-gray-200">{event?.location}</p>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </motion.ul>
+        {items.map((eventId) => {
+          const event = events.find((e: any) => e.id === eventId);
+          return event ? <Item key={event.id} event={event} /> : null;
+        })}
+      </Reorder.Group>
 
       {/* Modal com Formulário de Evento */}
       <Modal
