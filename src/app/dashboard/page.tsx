@@ -24,41 +24,52 @@ import { Reorder } from "framer-motion";
 import { getAuth } from "firebase/auth";
 import updateUser from "@/services/firebase/Update/user";
 
+import { EventType } from "@/types/Event";
+
 const auth = getAuth(app);
 
-export const Item = ({ event }: { [key: string]: any }) => {
+const Item = ({ event }: { event: EventType }) => {
   const y = useMotionValue(0);
   const [dragged, setDragged] = useState(false);
   const [startPosition, setStartPosition] = useState(0);
   const [menuVisible, setMenuVisible] = useState(false); // Estado para controlar a visibilidade do menu
 
-  const handleDragStart = (e: { [key: string]: any }) => {
+  const handleDragStart = (event: PointerEvent | MouseEvent | TouchEvent) => {
     setDragged(true);
-    setStartPosition(e.clientX || e.touches[0].clientX); // Captura a posição inicial
+    let startX: number;
+
+    if ("touches" in event) {
+      startX = event.touches[0].clientX; // Para TouchEvent
+    } else {
+      startX = event.clientX; // Para MouseEvent
+    }
+
+    setStartPosition(startX); // Captura a posição inicial
   };
 
-  const handleDrag = (e: { [key: string]: any }) => {
+  const handleDrag = (event: PointerEvent | MouseEvent | TouchEvent) => {
     if (dragged) {
-      const currentPosition = e.clientX || e.touches[0].clientX; // Posição atual
+      let currentX: number;
+
+      if ("touches" in event) {
+        currentX = event.touches[0].clientX; // Para TouchEvent
+      } else {
+        currentX = event.clientX; // Para MouseEvent
+      }
 
       // Determine a direção do drag
-      const direction = currentPosition - startPosition;
+      const direction = currentX - startPosition;
 
       // Verifica se arrastou para a direita
       if (direction > 50) {
-        // Ajuste o valor conforme necessário
         setMenuVisible(true); // Mostra o menu
       } else if (direction < -50) {
-        // Verifica se arrastou para a esquerda
         setMenuVisible(false); // Esconde o menu
       }
     }
   };
 
-  const handleDragEnd = () => {
-    //setDragged(false);
-    //setMenuVisible(false); // Esconde o menu ao soltar
-  };
+  const handleDragEnd = () => {};
 
   return (
     <Reorder.Item
@@ -73,6 +84,7 @@ export const Item = ({ event }: { [key: string]: any }) => {
     >
       <motion.div
         onClick={() => ({})}
+        initial={{ scale: 0 }}
         animate={{ scale: menuVisible ? 1 : 0 }}
         className="w-20 h-full bg-red-600 rounded-3xl absolute -right-4 flex justify-center items-center"
       >
@@ -128,7 +140,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (events) {
-      setItems(events.map((event: any) => event.id));
+      setItems(events.map((event: EventType) => event.id));
     }
   }, [events]);
 
@@ -245,9 +257,7 @@ export default function DashboardPage() {
         transition={{ duration: 0.2 }}
       >
         {items.map((eventId) => {
-          const event = events.find(
-            (e: { [key: string]: any }) => e.id === eventId
-          );
+          const event = events.find((e: EventType) => e.id === eventId);
           return event ? <Item key={event.id} event={event} /> : null;
         })}
       </Reorder.Group>
