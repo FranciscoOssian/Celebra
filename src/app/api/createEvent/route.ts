@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
         ...event,
         fileHero: fileHash,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        creatorUid: uid,
+        creatorId: uid,
       };
 
       // Save event to Firestore

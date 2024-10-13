@@ -3,10 +3,12 @@
 import { AnimatePresence, Reorder } from "framer-motion";
 import EventItem from "../EventItem";
 import { EventType } from "@/types/Event";
+import Link from "next/link";
 
 interface EventListProps {
   items: string[];
   events: EventType[];
+  eventType: string;
   viewMode: "list" | "grid";
   onReorder: (newOrder: string[]) => void;
   onDelete: (eventId: string) => void;
@@ -16,6 +18,7 @@ const EventList: React.FC<EventListProps> = ({
   items,
   events,
   viewMode,
+  eventType,
   onReorder,
   onDelete,
 }) => {
@@ -36,6 +39,7 @@ const EventList: React.FC<EventListProps> = ({
           const event = events.find((e) => e.id === eventId);
           return event ? (
             <EventItem
+              eventType={eventType}
               key={event.id}
               event={event}
               onDelete={() => onDelete(event.id)}

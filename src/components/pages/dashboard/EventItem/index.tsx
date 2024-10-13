@@ -10,9 +10,14 @@ import { EventType } from "@/types/Event";
 interface EventItemProps {
   event: EventType;
   onDelete: () => void;
+  eventType: string;
 }
 
-const EventItem: React.FC<EventItemProps> = ({ event, onDelete }) => {
+const EventItem: React.FC<EventItemProps> = ({
+  event,
+  onDelete,
+  eventType,
+}) => {
   const y = useMotionValue(0);
   const [menuVisible, setMenuVisible] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -28,7 +33,7 @@ const EventItem: React.FC<EventItemProps> = ({ event, onDelete }) => {
 
   return (
     <Reorder.Item
-      drag
+      drag={eventType === "my" ? true : false}
       value={event.id}
       id={event.id}
       exit={{ x: -300, opacity: 0 }}

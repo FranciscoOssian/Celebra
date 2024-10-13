@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import SlideButton from "@/components/pages/dashboard/SlideButton";
 import useUser from "@/services/firebase/Hooks/useUser";
 import useUserEvents from "@/services/firebase/Hooks/useEvents";
@@ -18,25 +18,36 @@ import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
 import updateUser from "@/services/firebase/Update/user";
 import EventList from "@/components/pages/dashboard/EventList";
+import useUserSubscriptions from "@/services/firebase/Hooks/useUserSubscriptions";
+import SwitchSelection from "@/components/common/SwitchSelection";
+import { motion } from "framer-motion";
 
 const auth = getAuth(app);
 
 const DashboardPage: React.FC = () => {
   const { user } = useUser();
-  const { events, deleteEvent } = useUserEvents(user?.events);
+  const { events: myEvents, deleteEvent } = useUserEvents(user?.events);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const deviceType = useDeviceType();
   const router = useRouter();
+  const { subscriptions } = useUserSubscriptions(user?.uid);
 
   const [items, setItems] = useState<string[]>([]);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
+  const [evenType, setEventType] = useState<"my" | "third_parties">("my");
+  const [events, setEvents] = useState(myEvents);
+
   useEffect(() => {
-    if (events) {
-      setItems(events.map((event) => event.id));
+    if (evenType === "my") {
+      setEvents(myEvents);
+      setItems(myEvents.map((e) => e.id));
+    } else {
+      setEvents(subscriptions);
+      setItems(subscriptions.map((e) => e.id));
     }
-  }, [events]);
+  }, [evenType, subscriptions, myEvents]);
 
   useEffect(() => {
     if (deviceType === "desktop" && events.length > 1) {
@@ -44,11 +55,11 @@ const DashboardPage: React.FC = () => {
     } else {
       setViewMode("list");
     }
-  }, [deviceType, events]);
+  }, [deviceType, events, evenType]);
 
   const handleReorder = useCallback(
     (newOrder: string[]) => {
-      if (viewMode === "grid") return;
+      if (viewMode === "grid" || evenType === "third_parties") return;
 
       setItems(newOrder);
 
@@ -62,7 +73,7 @@ const DashboardPage: React.FC = () => {
 
       setTimeoutId(id);
     },
-    [viewMode, timeoutId, user]
+    [viewMode, evenType, timeoutId, user?.uid]
   );
 
   const handleCreateEvent = async (eventData: EventFormType) => {
@@ -71,10 +82,7 @@ const DashboardPage: React.FC = () => {
 
       const formData = new FormData();
       formData.append("tokenId", tokenId ?? "");
-      formData.append(
-        "event",
-        JSON.stringify({ ...eventData, creatorId: user?.uid })
-      );
+      formData.append("event", JSON.stringify({ ...eventData }));
 
       if (eventData.eventFileHero) {
         formData.append("file", eventData.eventFileHero);
@@ -115,69 +123,106 @@ const DashboardPage: React.FC = () => {
     [deleteEvent, items, user]
   );
 
+  const subText = useMemo(() => {
+    if (evenType === "my") {
+      if (events.length === 0) return "Você ainda não criou eventos";
+      else
+        return `Você tem ${user?.purchasedEvents} evento(s) comprado(s) disponíveis para criação`;
+    } else return `Você está inscrito em ${events?.length ?? 0} eventos`;
+  }, [evenType, user, events]);
+
   return (
     <div className="container mx-auto p-4">
-      <header className="flex flex-col items-center pt-20">
-        <h1 className="mb-6 text-6xl text-center font-bold tracking-tight text-[#001122]">
+      <header className="flex mb-20 relative flex-col items-center pt-20">
+        <h1 className="mb-6  text-6xl text-center font-bold tracking-tight text-[#001122]">
           Meus Eventos
         </h1>
-        {(user?.purchasedEvents ?? 0) > 0 && (
-          <div className="mb-6 text-center font-bold tracking-tight text-[#001122]">
-            Você tem {user?.purchasedEvents} evento(s) comprado(s) disponíveis
-            para criação
-          </div>
-        )}
-        <SlideButton
-          onClick={() => {
-            if ((user?.events?.length ?? 0) >= 3) {
-              //alert(
-              //  "Limite de eventos atingido, em breve teremos opção por pagamento"
-              //);
-              setIsModalOpen(true);
-            } else {
-              setIsModalOpen(true);
-            }
-          }}
-        />
+        <motion.div className="mb-6 absolute -bottom-16 text-center font-bold tracking-tight text-[#001122]">
+          {subText}
+        </motion.div>
       </header>
 
-      {user?.events?.length === 0 && (
-        <div className="flex flex-col items-center justify-center mt-10 text-center">
-          <Image
-            src="/no-events.jpeg"
-            alt="Sem eventos"
-            width={256}
-            height={256}
-            className="w-64 h-64 rounded-full"
-          />
-          <h2 className="text-2xl font-semibold text-gray-500 mt-4">
-            Você não tem eventos :(
-          </h2>
-          <p className="text-gray-400 mt-2">
-            Crie seu primeiro evento e comece a planejar algo incrível!
-          </p>
+      <SwitchSelection
+        onSelect={(s) => {
+          if (s === "Meus") setEventType("my");
+          else if (s === "Que eu me inscrevi") setEventType("third_parties");
+        }}
+        options={["Meus", "Que eu me inscrevi"]}
+      />
+
+      {events?.length !== 0 && (
+        <div className="flex justify-between items-center w-full max-md:flex-col gap-6">
+          <div />
+          <div className="flex h-10 gap-5 m-4">
+            <button
+              className="p-2 bg-blue-500 text-white rounded-lg max-md:order-2"
+              onClick={toggleViewMode}
+              aria-label="Alternar modo de visualização"
+            >
+              {viewMode === "list" ? (
+                <QueueListIcon className="w-6 h-6" />
+              ) : (
+                <TableCellsIcon className="w-6 h-6" />
+              )}
+            </button>
+
+            <SlideButton
+              className={`${evenType !== "my" ? "hidden" : ""}`}
+              onClick={() => {
+                if ((user?.events?.length ?? 0) >= 3) {
+                  //alert(
+                  //  "Limite de eventos atingido, em breve teremos opção por pagamento"
+                  //);
+                  setIsModalOpen(true);
+                } else {
+                  setIsModalOpen(true);
+                }
+              }}
+            />
+          </div>
         </div>
       )}
 
-      {user?.events?.length !== 0 && (
-        <div className="w-full flex justify-end mb-3">
-          <button
-            className="p-2 bg-blue-500 text-white rounded-lg"
-            onClick={toggleViewMode}
-            aria-label="Alternar modo de visualização"
-          >
-            {viewMode === "list" ? (
-              <QueueListIcon className="w-6 h-6" />
-            ) : (
-              <TableCellsIcon className="w-6 h-6" />
-            )}
-          </button>
+      {events?.length === 0 && (
+        <div className="flex flex-col items-center justify-center gap-3 mt-3 text-center">
+          {evenType === "my" && (
+            <SlideButton
+              className={`${evenType !== "my" ? "hidden" : ""}`}
+              onClick={() => {
+                if ((user?.events?.length ?? 0) >= 3) {
+                  //alert(
+                  //  "Limite de eventos atingido, em breve teremos opção por pagamento"
+                  //);
+                  setIsModalOpen(true);
+                } else {
+                  setIsModalOpen(true);
+                }
+              }}
+            />
+          )}
+          <div className="flex flex-col justify-center items-center text-center">
+            <Image
+              src="/no-events.jpeg"
+              alt="Sem eventos"
+              width={256}
+              height={256}
+              className="w-64 h-64 rounded-full"
+            />
+            <h2 className="text-2xl font-semibold text-gray-500 mt-4">
+              Você não tem eventos :(
+            </h2>
+            <p className="text-gray-400 mt-2">
+              {evenType === "my" ? "Crie" : "Encontre"} seu primeiro evento e
+              comece a planejar algo incrível!
+            </p>
+          </div>
         </div>
       )}
 
       <EventList
         items={items}
         events={events}
+        eventType={evenType}
         viewMode={viewMode}
         onReorder={handleReorder}
         onDelete={handleDelete}

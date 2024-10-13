@@ -2,10 +2,16 @@
 
 import { motion } from "framer-motion";
 
-export default function SlideButton({ onClick }: { onClick: () => void }) {
+export default function SlideButton({
+  onClick,
+  className,
+}: {
+  onClick: () => void;
+  className?: string;
+}) {
   return (
     <motion.div
-      className="flex items-center justify-center gap-3 p-3 border rounded-lg cursor-pointer"
+      className={`flex items-center justify-center gap-3 p-3 border rounded-lg cursor-pointer ${className}`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={() => onClick()}
