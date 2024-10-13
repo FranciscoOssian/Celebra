@@ -3,7 +3,6 @@
 import { AnimatePresence, Reorder } from "framer-motion";
 import EventItem from "../EventItem";
 import { EventType } from "@/types/Event";
-import Link from "next/link";
 
 interface EventListProps {
   items: string[];

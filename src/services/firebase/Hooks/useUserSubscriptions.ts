@@ -41,7 +41,7 @@ const useUserSubscriptions = (userId?: string) => {
 
         // Filtrar para garantir que só eventos existentes sejam incluídos
         setSubscriptions(subscribedEvents.filter((event) => event !== null));
-      } catch (err) {
+      } catch {
         setError("Erro ao buscar eventos subscritos.");
       } finally {
         setLoading(false);
