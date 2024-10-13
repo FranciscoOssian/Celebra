@@ -1,5 +1,3 @@
-// src/components/Dashboard/DashboardPage.tsx
-
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
@@ -7,7 +5,6 @@ import SlideButton from "@/components/pages/dashboard/SlideButton";
 import useUser from "@/services/firebase/Hooks/useUser";
 import useUserEvents from "@/services/firebase/Hooks/useEvents";
 import { QueueListIcon, TableCellsIcon } from "@heroicons/react/16/solid";
-import Modal from "@/components/common/Modal";
 import EventForm, {
   EventFormType,
 } from "@/components/pages/dashboard/EventForm";
@@ -21,6 +18,7 @@ import EventList from "@/components/pages/dashboard/EventList";
 import useUserSubscriptions from "@/services/firebase/Hooks/useUserSubscriptions";
 import SwitchSelection from "@/components/common/SwitchSelection";
 import { motion } from "framer-motion";
+import BottomSheet from "@/components/common/BottomSheet";
 
 const auth = getAuth(app);
 
@@ -132,111 +130,114 @@ const DashboardPage: React.FC = () => {
   }, [evenType, user, events]);
 
   return (
-    <div className="container mx-auto p-4">
-      <header className="flex mb-20 relative flex-col items-center pt-20">
-        <h1 className="mb-6  text-6xl text-center font-bold tracking-tight text-[#001122]">
-          Meus Eventos
-        </h1>
-        <motion.div className="mb-6 absolute -bottom-16 text-center font-bold tracking-tight text-[#001122]">
-          {subText}
-        </motion.div>
-      </header>
+    <>
+      <div className="container mx-auto p-4">
+        <header className="flex mb-20 relative flex-col items-center pt-20">
+          <h1 className="mb-6  text-6xl text-center font-bold tracking-tight text-[#001122]">
+            Meus Eventos
+          </h1>
+          <motion.div className="mb-6 absolute -bottom-16 text-center font-bold tracking-tight text-[#001122]">
+            {subText}
+          </motion.div>
+        </header>
 
-      <SwitchSelection
-        onSelect={(s) => {
-          if (s === "Meus") setEventType("my");
-          else if (s === "Que eu me inscrevi") setEventType("third_parties");
-        }}
-        options={["Meus", "Que eu me inscrevi"]}
-      />
+        <SwitchSelection
+          onSelect={(s) => {
+            if (s === "Meus") setEventType("my");
+            else if (s === "Que eu me inscrevi") setEventType("third_parties");
+          }}
+          options={["Meus", "Que eu me inscrevi"]}
+        />
 
-      {events?.length !== 0 && (
-        <div className="flex justify-between items-center w-full max-md:flex-col gap-6">
-          <div />
-          <div className="flex h-10 gap-5 m-4">
-            <button
-              className="p-2 bg-blue-500 text-white rounded-lg max-md:order-2"
-              onClick={toggleViewMode}
-              aria-label="Alternar modo de visualização"
-            >
-              {viewMode === "list" ? (
-                <QueueListIcon className="w-6 h-6" />
-              ) : (
-                <TableCellsIcon className="w-6 h-6" />
-              )}
-            </button>
+        {events?.length !== 0 && (
+          <div className="flex justify-between items-center w-full max-md:flex-col gap-6">
+            <div />
+            <div className="flex h-10 gap-5 m-4">
+              <button
+                className="p-2 bg-blue-500 text-white rounded-lg max-md:order-2"
+                onClick={toggleViewMode}
+                aria-label="Alternar modo de visualização"
+              >
+                {viewMode === "list" ? (
+                  <QueueListIcon className="w-6 h-6" />
+                ) : (
+                  <TableCellsIcon className="w-6 h-6" />
+                )}
+              </button>
 
-            <SlideButton
-              className={`${evenType !== "my" ? "hidden" : ""}`}
-              onClick={() => {
-                if ((user?.events?.length ?? 0) >= 3) {
-                  //alert(
-                  //  "Limite de eventos atingido, em breve teremos opção por pagamento"
-                  //);
-                  setIsModalOpen(true);
-                } else {
-                  setIsModalOpen(true);
-                }
-              }}
-            />
+              <SlideButton
+                className={`${evenType !== "my" ? "hidden" : ""}`}
+                onClick={() => {
+                  if ((user?.events?.length ?? 0) >= 3) {
+                    //alert(
+                    //  "Limite de eventos atingido, em breve teremos opção por pagamento"
+                    //);
+                    setIsModalOpen(true);
+                  } else {
+                    setIsModalOpen(true);
+                  }
+                }}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {events?.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-3 mt-3 text-center">
-          {evenType === "my" && (
-            <SlideButton
-              className={`${evenType !== "my" ? "hidden" : ""}`}
-              onClick={() => {
-                if ((user?.events?.length ?? 0) >= 3) {
-                  //alert(
-                  //  "Limite de eventos atingido, em breve teremos opção por pagamento"
-                  //);
-                  setIsModalOpen(true);
-                } else {
-                  setIsModalOpen(true);
-                }
-              }}
-            />
-          )}
-          <div className="flex flex-col justify-center items-center text-center">
-            <Image
-              src="/no-events.jpeg"
-              alt="Sem eventos"
-              width={256}
-              height={256}
-              className="w-64 h-64 rounded-full"
-            />
-            <h2 className="text-2xl font-semibold text-gray-500 mt-4">
-              Você não tem eventos :(
-            </h2>
-            <p className="text-gray-400 mt-2">
-              {evenType === "my" ? "Crie" : "Encontre"} seu primeiro evento e
-              comece a planejar algo incrível!
-            </p>
+        {events?.length === 0 && (
+          <div className="flex flex-col items-center justify-center gap-3 mt-3 text-center">
+            {evenType === "my" && (
+              <SlideButton
+                className={`${evenType !== "my" ? "hidden" : ""}`}
+                onClick={() => {
+                  if ((user?.events?.length ?? 0) >= 3) {
+                    //alert(
+                    //  "Limite de eventos atingido, em breve teremos opção por pagamento"
+                    //);
+                    setIsModalOpen(true);
+                  } else {
+                    setIsModalOpen(true);
+                  }
+                }}
+              />
+            )}
+            <div className="flex flex-col justify-center items-center text-center">
+              <Image
+                src="/no-events.jpeg"
+                alt="Sem eventos"
+                width={256}
+                height={256}
+                className="w-64 h-64 rounded-full"
+              />
+              <h2 className="text-2xl font-semibold text-gray-500 mt-4">
+                Você não tem eventos :(
+              </h2>
+              <p className="text-gray-400 mt-2">
+                {evenType === "my" ? "Crie" : "Encontre"} seu primeiro evento e
+                comece a planejar algo incrível!
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <EventList
-        items={items}
-        events={events}
-        eventType={evenType}
-        viewMode={viewMode}
-        onReorder={handleReorder}
-        onDelete={handleDelete}
-      />
-
-      <Modal
-        className="bg-white p-4 m-4 md:m-0 rounded-3xl w-full md:w-1/2"
+        <EventList
+          items={items}
+          events={events}
+          eventType={evenType}
+          viewMode={viewMode}
+          onReorder={handleReorder}
+          onDelete={handleDelete}
+        />
+      </div>
+      <BottomSheet
+        className={`p-6 ${
+          deviceType === "desktop" || deviceType === "tablet" ? "!w-1/2" : ""
+        }`}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
         <h2 className="text-xl font-semibold mb-4">Criar Novo Evento</h2>
         <EventForm onSubmit={handleCreateEvent} />
-      </Modal>
-    </div>
+      </BottomSheet>
+    </>
   );
 };
 
