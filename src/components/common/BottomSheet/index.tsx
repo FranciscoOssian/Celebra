@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useScreenDimensions from "@/hooks/useScreenDimensions";
 import Button from "../Button";
@@ -15,11 +15,7 @@ const BottomSheet = ({
   children?: React.ReactNode;
 }) => {
   const { height } = useScreenDimensions();
-  const topContraint = useMemo(
-    () => -(height - (height / 100) * 20) / 2,
-    [height]
-  );
-  const classNameFinal = `rounded-2xl w-full bg-white h-[100vh] absolute top-[30vh] right-0 shadow-[0px_-40px_50px_rgba(0,0,0,0.4)] ${className}`;
+  const classNameFinal = `rounded-2xl w-full bg-white h-[100vh] absolute right-0 top-[60px] shadow-[0px_-40px_50px_rgba(0,0,0,0.4)] ${className}`;
   return (
     <AnimatePresence>
       {isOpen && (
@@ -37,7 +33,10 @@ const BottomSheet = ({
             animate={{ y: isOpen ? 0 : height }}
             transition={{ type: "tween", stiffness: 0, duration: 0.7 }}
             drag="y"
-            dragConstraints={{ top: topContraint, bottom: 0 }}
+            dragConstraints={{
+              top: 0,
+              bottom: 0,
+            }}
           >
             <div className="w-full flex justify-end">
               <div className="w-[55%] m-4 flex justify-between items-center">
