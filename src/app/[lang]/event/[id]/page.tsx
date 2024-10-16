@@ -17,6 +17,7 @@ import useEvent from "@/services/firebase/Hooks/useEvent";
 import InternalLayout from "@/components/layout/InternalLayout";
 import { motion } from "framer-motion";
 import useDeviceType from "@/hooks/useDeviceType";
+import { getTranslations, translations } from "@/services/translations";
 
 const auth = getAuth();
 
@@ -65,8 +66,7 @@ const AnimatedCheck = () => {
   );
 };
 
-const EventPage = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const EventPage = ({ params: { lang, id } }: never) => {
   const { user } = useUser();
   const { event, loading, error, fileHero } = useEvent(id);
   const { subscription, noSubscription } = useUserSubscription(user?.uid, id);
@@ -75,6 +75,8 @@ const EventPage = ({ params }: { params: { id: string } }) => {
   const [isTrying, setIsTrying] = useState(false);
   const [showDone, setShowDone] = useState<boolean>(false);
   const deviceType = useDeviceType();
+
+  const t = getTranslations(lang, translations);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
@@ -108,9 +110,10 @@ const EventPage = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  if (loading) return <div>Carregando...</div>;
-  if (error) return <div>Erro ao buscar o evento. Tente novamente.</div>;
-  if (!event?.exists()) return <div>Evento não encontrado.</div>;
+  if (loading) return <div>{t("Loading")}...</div>;
+  if (error)
+    return <div>{t("Unable to load the event. Please try again.")}</div>;
+  if (!event?.exists()) return <div>{t("Event not found.")}</div>;
 
   const eventData = event.data();
 
@@ -151,7 +154,7 @@ const EventPage = ({ params }: { params: { id: string } }) => {
                 });
               }}
             >
-              se inscrever
+              {t("Get tickets")}
             </button>
           </div>
         )}
@@ -165,7 +168,7 @@ const EventPage = ({ params }: { params: { id: string } }) => {
           {eventData.location}
         </div>
         <p className="text-lg mb-4">
-          <strong>Sobre:</strong> {eventData.about}
+          <strong>{t("About")}:</strong> {eventData.about}
         </p>
       </InternalLayout>
 
@@ -182,17 +185,20 @@ const EventPage = ({ params }: { params: { id: string } }) => {
         {!showDone ? (
           <div className="w-full h-full flex flex-col justify-start items-center text-center">
             <h2 className="mt-5 text-xl font-bold mb-4 text-center">
-              Pegar ingressos para o evento: {eventData.name}
+              {t("Get tickets for the event")}: {eventData.name}
             </h2>
             {!noSubscription && (
               <div className="mb-4 text-justify px-11">
-                Você já possui {subscription?.amount} comprado(s) em{" "}
+                {t("You already have")} {subscription?.amount}{" "}
+                {t("purchased on")}{" "}
                 {formatDayMonth(
                   new Date(subscription?.purchasedAt?.seconds ?? 0)
                 )}
                 .
                 <br />
-                Caso queira comprar mais, preencha o campo e compre novamente.
+                {t(
+                  "If you wish to purchase more, fill in the field and buy again."
+                )}
               </div>
             )}
             <form
@@ -204,7 +210,7 @@ const EventPage = ({ params }: { params: { id: string } }) => {
               }}
             >
               <label htmlFor="amount" className="text-lg font-medium mb-2">
-                Quantidade de ingressos:
+                {t("Number of tickets")}:
               </label>
               <input
                 id="amount"
@@ -224,7 +230,7 @@ const EventPage = ({ params }: { params: { id: string } }) => {
               </datalist>
               <Button type="submit">
                 {!isTrying ? (
-                  "Confirmar"
+                  t("Confirm")
                 ) : (
                   <ArrowPathIcon className="size-5 animate-spin" />
                 )}

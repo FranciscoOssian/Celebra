@@ -1,5 +1,8 @@
 "use client";
 
+import { getTranslations, translations } from "@/services/translations";
+import { useParams } from "next/navigation";
+
 interface PriceCardPropsType {
   title: string;
   price: number;
@@ -34,13 +37,27 @@ export default function PriceCard({
   single,
   product,
 }: PriceCardPropsType) {
+  const { lang } = useParams();
+
+  const t = getTranslations(
+    typeof lang === "string" ? lang : lang[0],
+    translations
+  );
+
   return (
     <div className="bg-white p-7 rounded-3xl shadow-[0px_0.796192px_3.38858px_-0.625px_rgba(0,0,0,0.07),0px_2.41451px_9.24352px_-1.25px_rgba(0,0,0,0.07),0px_6.38265px_24.148px_-1.875px_rgba(0,0,0,0.07),0px_20px_rgba(0,0,0,0.07)] w-[320px] h-[395px]">
       <div className="text-gray-600 text-lg font-semibold mb-2">{title}</div>
       <div className="flex items-center mb-8">
         <div className="text-5xl font-bold text-gray-900 mr-2">R${price}</div>
         <div className="text-gray-600 text-lg font-semibold">
-          p/{monthly ? "month" : annual ? "year" : single ? product : product}
+          p/
+          {monthly
+            ? t("month")
+            : annual
+            ? t("year")
+            : single
+            ? product
+            : product}
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -55,7 +72,7 @@ export default function PriceCard({
         onClick={onClick}
         className="bg-gray-900 text-white px-4 py-2 rounded-md mt-4 hover:bg-gray-800"
       >
-        Get Started
+        {t("Get Started")}
       </button>
     </div>
   );

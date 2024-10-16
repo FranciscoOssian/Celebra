@@ -10,7 +10,7 @@
     "Is there a limit to the number of events I can create for free?": "Existe um limite de eventos que posso criar gratuitamente?",
     "How do I manage my guests?": "Como gerencio meus convidados?",
     "Can I customize the invitations?": "Posso personalizar os convites?",
-    "What is the payment model for Celebra?": "Qual é o modelo de pagamento do Celebra?",
+    "What is Celebra's payment model?": "Qual é o modelo de pagamento do Celebra?",
     "How does payment processing work?": "Como funciona o processamento de pagamentos?",
     "Is the platform accessible on mobile devices?": "A plataforma é acessível em dispositivos móveis?",
     "How can I contact for more information?": "Como posso entrar em contato para mais informações?",
@@ -24,6 +24,126 @@
     "Get Started": "Comece agora",
     "Per event / in progress": "Por evento / em construção",
     "R$2 per event": "R$2 p/evento",
-    "Manage as many events as you want simultaneously": "Gerencie quantos eventos quiser simultaneamente"
+    "Manage as many events as you want simultaneously": "Gerencie quantos eventos quiser simultaneamente",
+
+    "Celebra is a SaaS platform designed to simplify the creation and management of events, initially focused on birthdays but with the potential to expand to other types of celebrations.": "Celebra é uma plataforma SaaS projetada para simplificar a criação e o gerenciamento de eventos, inicialmente focada em aniversários, mas com potencial para se expandir para outros tipos de celebrações.",
+
+    "To create an event, simply access the platform and fill out a simple form with the event details, such as name, date, time, location, and description.": "Para criar um evento, basta acessar a plataforma e preencher um formulário simples com os detalhes do evento, como nome, data, hora, localização e descrição.",
+
+    "Yes, you can create up to three events for free. After that, a fee will be charged for each event created.": "Sim, você pode criar até três eventos gratuitamente. Após isso, uma taxa será cobrada para cada evento criado.",
+
+    "The platform allows you to add guests and manage the attendance list. You can track who confirmed attendance and who could not make it.": "A plataforma permite que você adicione convidados e gerencie a lista de presença. Você pode acompanhar quem confirmou presença e quem não pôde comparecer.",
+
+    "Yes! Invitations can be customized to reflect the theme of your event. You can add images, text, and styles to the event page.": "Sim! Os convites podem ser personalizados para refletir o tema do seu evento. Você pode adicionar imagens, textos e estilos à página do evento.",
+
+    "Celebra operates on a pay-per-event model, eliminating monthly fees. You only pay for the events you create.": "O Celebra opera em um modelo de pagamento por evento, eliminando taxas mensais. Você só paga pelos eventos que criar.",
+
+    "Payments are processed through integration with Stripe, ensuring a secure and efficient experience for paid events.": "Os pagamentos são processados através da integração com o Stripe, garantindo uma experiência segura e eficiente para eventos pagos.",
+
+    "Yes, Celebra's design is responsive and adaptable to different devices, allowing event creation anywhere and anytime.": "Sim, o design do Celebra é responsivo e adaptável a diferentes dispositivos, permitindo a criação de eventos em qualquer lugar e a qualquer hora.",
+
+    "For more information, you can access the contact section on the platform or send an email to our support team.": "Para mais informações, você pode acessar a seção de contato na plataforma ou enviar um e-mail para nossa equipe de suporte.",
+
+    "Celebra - Organize your events easily": "Celebra - Organize seus eventos de forma fácil",
+
+    "Loading": "Carregando",
+
+    "Unable to load the event. Please try again.": "Não foi possível carregar o evento. Por favor, tente novamente.",
+
+    "Event not found.": "Evento não encontrado.",
+
+    "Get tickets": "Adquirir ingresso",
+
+    "About": "Sobre",
+
+    "Get tickets for the event": "Obter ingressos para o evento",
+
+    "You already have": "Você já tem",
+
+    "purchased on": "comprado(s) em",
+
+    "If you wish to purchase more, fill in the field and buy again.": "Se desejar adquirir mais, preencha o campo e compre novamente.",
+
+    "Number of tickets": "Quantidade de ingressos",
+
+    "Confirm": "Confirmar",
+
+    "Toggle view mode": "Alterar modo de visualização",
+
+    "You have no events :(": "Você não possui eventos :(",
+
+    "Create": "Crie",
+
+    "Find": "Encontre",
+
+    "your first event and start planning something amazing!": "seu primeiro evento e comece a planejar algo incrível!",
+
+    "Create New Event": "Criar Novo Evento",
+
+    "Sign in with Google": "Entrar com Google",
+
+    "Sign in with Email": "Entrar com Email",
+
+    "Password": "Senha",
+
+    "Your password": "Sua senha",
+
+    "or": "ou",
+
+    "An unexpected error occurred.": "Ocorreu um erro inesperado.",
+
+    "The email has already been used.": "O e-mail já foi utilizado.",
+
+    "The email is invalid.": "O e-mail é inválido.",
+
+    "Invalid password.": "Senha inválida.",
+
+    "Weak password. Your password must be at least 6 characters long.": "Senha fraca. Sua senha deve ter no mínimo 6 caracteres.",
+
+    "Sign up with Google": "Cadastrar com Google",
+
+    "Sign up with Email": "Cadastrar com Email",
+
+    "Are you sure you want to delete your account? This action cannot be undone.": "Tem certeza de que deseja excluir sua conta? Essa ação não pode ser desfeita.",
+
+    "Account, events, and user documents deleted successfully.": "Conta, eventos e documentos do usuário excluídos com sucesso.",
+
+    "Error deleting the account. Please log in again and try again.": "Erro ao excluir a conta. Faça login novamente e tente novamente.",
+
+    "Account deletion action canceled.": "Ação de excluir conta cancelada.",
+
+    "Error logging out of the account.": "Erro ao sair da conta.",
+
+    "Password reset email sent.": "E-mail de redefinição de senha enviado.",
+
+    "Error sending the password reset email.": "Erro ao enviar o e-mail de redefinição de senha.",
+
+    "Delete account": "Excluir conta",
+
+    "Log out of the account": "Sair da conta",
+
+    "Change password": "Alterar senha",
+
+    "You have": "Você tem",
+
+    "Purchased event(s) available for creation.": "Evento(s) adquirido(s) disponíveis para criação.",
+
+    "You are registered for": "Você está registrado em",
+
+    "events": "eventos",
+
+    "Created by me": "Criados por mim",
+
+    "I registered for": "Em que me inscrevi",
+
+    "Pricing": "Preços",
+
+    "You haven't created any events yet.": "Você ainda não criou nenhum evento.",
+
+    "Per event / under construction": "Por event / em construção",
+
+    "month": "mês",
+
+    "year": "ano"
   }
 }

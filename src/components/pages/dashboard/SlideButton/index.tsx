@@ -1,6 +1,9 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import { motion } from "framer-motion";
+import { getTranslations, translations } from "@/services/translations";
 
 export default function SlideButton({
   onClick,
@@ -9,6 +12,11 @@ export default function SlideButton({
   onClick: () => void;
   className?: string;
 }) {
+  const { lang } = useParams();
+  const t = getTranslations(
+    typeof lang === "string" ? lang : lang[0],
+    translations
+  );
   return (
     <motion.div
       className={`flex items-center justify-center gap-3 p-3 border rounded-lg cursor-pointer ${className}`}
@@ -16,7 +24,7 @@ export default function SlideButton({
       whileTap={{ scale: 0.95 }}
       onClick={() => onClick()}
     >
-      <p className="text-lg">Criar novo Evento</p>
+      <p className="text-lg">{t("Create New Event")}</p>
       <div className="">
         <svg
           xmlns="http://www.w3.org/2000/svg"

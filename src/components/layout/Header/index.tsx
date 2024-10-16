@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "@/services/firebase/firebase";
 
+import { useParams } from "next/navigation";
+import { getTranslations, translations } from "@/services/translations";
+
 const Menu = ({
   className,
   onClick,
@@ -20,6 +23,13 @@ const Menu = ({
   avatar: string;
 }) => {
   const router = useRouter();
+
+  const { lang } = useParams();
+
+  const t = getTranslations(
+    typeof lang === "string" ? lang : "en",
+    translations
+  );
 
   return (
     <nav className={`flex justify-center items-center ${className}`}>
@@ -37,7 +47,7 @@ const Menu = ({
             href="#pricing"
             className="text-gray-700 hover:text-[#00bfff]"
           >
-            Pricing
+            {t("Pricing")}
           </a>
           <Button
             onClick={() => {
@@ -46,7 +56,7 @@ const Menu = ({
             }}
             className="bg-[#001122] text-white rounded-md px-4 py-2 hover:bg-[#002244] transition duration-300"
           >
-            Login
+            {t("Login")}
           </Button>
           <Button
             onClick={() => {
@@ -55,7 +65,7 @@ const Menu = ({
             }}
             className="bg-[#00bfff] text-white rounded-md px-4 py-2 hover:bg-[#0099cc] transition duration-300"
           >
-            Cadastrar
+            {t("Signup")}
           </Button>
         </>
       ) : (
@@ -65,14 +75,14 @@ const Menu = ({
             href="/dashboard"
             className="text-gray-700 hover:text-[#00bfff]"
           >
-            Meus eventos
+            {t("My Events")}
           </a>
           <a
             onClick={onClick}
             href="/account"
             className="text-gray-700 hover:text-[#00bfff]"
           >
-            Perfil
+            {t("Profile")}
           </a>
           {avatar && <Avatar alt="" size={40} src={avatar} />}
           {!avatar && (
@@ -85,7 +95,7 @@ const Menu = ({
             href="/"
             className="text-gray-700 mouse-pointer hover:text-[#00bfff]"
           >
-            Sair
+            {t("Logout")}
           </a>
         </>
       )}

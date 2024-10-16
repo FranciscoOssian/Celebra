@@ -12,8 +12,9 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { getTranslations, translations } from "@/services/translations";
 
-export default function SignInPage() {
+export default function SignInPage({ params: { lang } }: never) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailRegisterVisible, setIsEmailRegisterVisible] = useState(false);
@@ -22,6 +23,9 @@ export default function SignInPage() {
   const router = useRouter();
 
   const { user } = useUser();
+
+  const t = getTranslations(lang, translations);
+
   useEffect(() => {
     if (user?.uid) router.push("/dashboard");
   }, [user, router]);
@@ -65,16 +69,16 @@ export default function SignInPage() {
             disabled={loading}
           >
             <FcGoogle className="w-5 h-5 mr-2" />
-            SignIn com Google
+            {t("Sign in with Google")}
           </button>
 
-          <div className="text-center text-gray-500">ou</div>
+          <div className="text-center text-gray-500">{t("or")}</div>
 
           <button
             onClick={() => setIsEmailRegisterVisible(true)}
             className={`w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-200`}
           >
-            SignIn com Email
+            {t("Sign in with Email")}
           </button>
         </div>
 
@@ -102,7 +106,7 @@ export default function SignInPage() {
             </div>
             <div>
               <label htmlFor="password" className="block mb-1 font-medium">
-                Senha:
+                {t("Password")}:
               </label>
               <input
                 type="password"
@@ -110,7 +114,7 @@ export default function SignInPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="Sua senha"
+                placeholder={t("Your password")}
                 required
               />
             </div>

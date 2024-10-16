@@ -7,8 +7,9 @@ import useUser from "@/services/firebase/Hooks/useUser";
 import { useRouter } from "next/navigation";
 import createUser, { CreateUserType } from "@/services/firebase/Create/user";
 import { AuthErrorCodes } from "firebase/auth";
+import { getTranslations, translations } from "@/services/translations";
 
-export default function SignUpPage() {
+export default function SignUpPage({ params: { lang } }: never) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailRegisterVisible, setIsEmailRegisterVisible] = useState(false);
@@ -17,6 +18,9 @@ export default function SignUpPage() {
   const router = useRouter();
 
   const { user } = useUser();
+
+  const t = getTranslations(lang, translations);
+
   useEffect(() => {
     if (user?.uid) router.push("/dashboard");
   }, [user, router]);
@@ -40,21 +44,22 @@ export default function SignUpPage() {
       const message = err.message;
       const code = err.code;
 
-      let alertMessage = "Ocorreu um erro inesperado.";
+      let alertMessage = t("An unexpected error occurred.");
 
       switch (code) {
         case AuthErrorCodes["EMAIL_EXISTS"]:
-          alertMessage = "O e-mail já usado.";
+          alertMessage = t("The email has already been used.");
           break;
         case AuthErrorCodes["INVALID_EMAIL"]:
-          alertMessage = "O email é inválido";
+          alertMessage = t("The email is invalid.");
           break;
         case AuthErrorCodes["INVALID_PASSWORD"]:
-          alertMessage = "Senha inválida";
+          alertMessage = t("Invalid password.");
           break;
         case AuthErrorCodes["WEAK_PASSWORD"]:
-          alertMessage =
-            "Senha fraca, sua senha deve ter no mínimo 6 caracteres";
+          alertMessage = t(
+            "Weak password. Your password must be at least 6 characters long."
+          );
           break;
         default:
           alertMessage = message; // Use a mensagem padrão do erro se não houver correspondência
@@ -90,7 +95,7 @@ export default function SignUpPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">SignIn</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">SignUp</h1>
 
         <div className="flex flex-col space-y-4">
           <button
@@ -101,16 +106,16 @@ export default function SignUpPage() {
             disabled={loading}
           >
             <FcGoogle className="w-5 h-5 mr-2" />
-            SignIn com Google
+            {t("Sign up with Google")}
           </button>
 
-          <div className="text-center text-gray-500">ou</div>
+          <div className="text-center text-gray-500">{t("or")}</div>
 
           <button
             onClick={() => setIsEmailRegisterVisible(true)}
             className={`w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-200`}
           >
-            SignIn com Email
+            {t("Sign up with Email")}
           </button>
         </div>
 
@@ -138,7 +143,7 @@ export default function SignUpPage() {
             </div>
             <div>
               <label htmlFor="password" className="block mb-1 font-medium">
-                Senha:
+                {t("Password")}:
               </label>
               <input
                 type="password"
@@ -157,7 +162,7 @@ export default function SignUpPage() {
               }`}
               disabled={loading}
             >
-              {loading ? "SignIn..." : "SignIn"}
+              {loading ? "SignUp..." : "SignUp"}
             </button>
           </motion.form>
         )}

@@ -11,14 +11,17 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { getFirestore, doc, deleteDoc } from "firebase/firestore";
+import { getTranslations, translations } from "@/services/translations";
 
-export default function Home() {
+export default function Home({ params: { lang } }: never) {
   const { user } = useUser();
   const auth = getAuth();
   const db = getFirestore();
   const router = useRouter();
 
   const avatar = user?.photoURL;
+
+  const t = getTranslations(lang, translations);
 
   // Função para deletar todos os eventos do usuário
   const deleteUserEvents = async () => {
@@ -52,7 +55,9 @@ export default function Home() {
   const handleDeleteAccount = async () => {
     if (auth.currentUser) {
       const confirmation = window.confirm(
-        "Tem certeza que deseja deletar sua conta? Essa ação não pode ser desfeita."
+        t(
+          "Are you sure you want to delete your account? This action cannot be undone."
+        )
       );
 
       if (confirmation) {
@@ -60,16 +65,16 @@ export default function Home() {
           await deleteUserEvents(); // Deleta os eventos do usuário
           await deleteUserDoc(); // Deleta o documento do usuário
           await deleteUser(auth.currentUser); // Deleta a conta do usuário
-          alert("Conta, eventos e documento do usuário deletados com sucesso.");
+          alert(t("Account, events, and user documents deleted successfully."));
           router.push("/auth/signin");
         } catch (error) {
           console.error("Erro ao deletar conta ou eventos/documento:", error);
           alert(
-            "Erro ao deletar a conta. Faça login novamente e tente de novo."
+            t("Error deleting the account. Please log in again and try again.")
           );
         }
       } else {
-        alert("Ação de deletar conta cancelada.");
+        alert(t("Account deletion action canceled."));
       }
     }
   };
@@ -81,7 +86,7 @@ export default function Home() {
       router.push("/login");
     } catch (error) {
       console.error("Erro ao sair:", error);
-      alert("Erro ao sair da conta.");
+      alert(t("Error logging out of the account."));
     }
   };
 
@@ -89,10 +94,10 @@ export default function Home() {
     if (auth.currentUser?.email) {
       try {
         await sendPasswordResetEmail(auth, auth.currentUser.email);
-        alert("E-mail de redefinição de senha enviado.");
+        alert(t("Password reset email sent."));
       } catch (error) {
         console.error("Erro ao mudar senha:", error);
-        alert("Erro ao enviar o e-mail de redefinição de senha.");
+        alert(t("Error sending the password reset email."));
       }
     }
   };
@@ -108,9 +113,9 @@ export default function Home() {
       <div>{user?.displayName}</div>
       <div>{user?.email}</div>
       <div className="mt-3 flex flex-col justify-center items-center gap-5">
-        <Button onClick={handleDeleteAccount}>Deletar conta</Button>
-        <Button onClick={handleSignOut}>Sair da conta</Button>
-        <Button onClick={handleChangePassword}>Mudar senha</Button>
+        <Button onClick={handleDeleteAccount}>{t("Delete account")}</Button>
+        <Button onClick={handleSignOut}>{t("Log out of the account")}</Button>
+        <Button onClick={handleChangePassword}>{t("Change password")}</Button>
       </div>
     </div>
   );

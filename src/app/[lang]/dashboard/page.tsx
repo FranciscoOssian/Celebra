@@ -19,10 +19,11 @@ import useUserSubscriptions from "@/services/firebase/Hooks/useUserSubscriptions
 import SwitchSelection from "@/components/common/SwitchSelection";
 import { motion } from "framer-motion";
 import BottomSheet from "@/components/common/BottomSheet";
+import { getTranslations, translations } from "@/services/translations";
 
 const auth = getAuth(app);
 
-const DashboardPage: React.FC = () => {
+const DashboardPage = ({ params: { lang } }: { params: { lang: string } }) => {
   const { user } = useUser();
   const { events: myEvents, deleteEvent } = useUserEvents(user?.events);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
@@ -36,6 +37,8 @@ const DashboardPage: React.FC = () => {
 
   const [evenType, setEventType] = useState<"my" | "third_parties">("my");
   const [events, setEvents] = useState(myEvents);
+
+  const t = getTranslations(lang, translations);
 
   useEffect(() => {
     if (evenType === "my") {
@@ -123,10 +126,15 @@ const DashboardPage: React.FC = () => {
 
   const subText = useMemo(() => {
     if (evenType === "my") {
-      if (events.length === 0) return "Você ainda não criou eventos";
+      if (events.length === 0) return t("You haven't created any events yet.");
       else
-        return `Você tem ${user?.purchasedEvents} evento(s) comprado(s) disponíveis para criação`;
-    } else return `Você está inscrito em ${events?.length ?? 0} eventos`;
+        return `${t("You have")} ${user?.purchasedEvents} ${t(
+          "Purchased event(s) available for creation."
+        )}`;
+    } else
+      return `${t("You are registered for")} ${events?.length ?? 0} ${t(
+        "events"
+      )}`;
   }, [evenType, user, events]);
 
   return (
@@ -134,7 +142,7 @@ const DashboardPage: React.FC = () => {
       <div className="container mx-auto p-4">
         <header className="flex mb-20 relative flex-col items-center pt-20">
           <h1 className="mb-6  text-6xl text-center font-bold tracking-tight text-[#001122]">
-            Meus Eventos
+            {t("My Events")}
           </h1>
           <motion.div className="mb-6 absolute -bottom-16 text-center font-bold tracking-tight text-[#001122]">
             {subText}
@@ -143,10 +151,10 @@ const DashboardPage: React.FC = () => {
 
         <SwitchSelection
           onSelect={(s) => {
-            if (s === "Meus") setEventType("my");
-            else if (s === "Que eu me inscrevi") setEventType("third_parties");
+            if (s === t("Created by me")) setEventType("my");
+            else if (s === t("I registered for")) setEventType("third_parties");
           }}
-          options={["Meus", "Que eu me inscrevi"]}
+          options={[t("Created by me"), t("I registered for")]}
         />
 
         {events?.length !== 0 && (
@@ -156,7 +164,7 @@ const DashboardPage: React.FC = () => {
               <button
                 className="p-2 bg-blue-500 text-white rounded-lg max-md:order-2"
                 onClick={toggleViewMode}
-                aria-label="Alternar modo de visualização"
+                aria-label={t("Toggle view mode")}
               >
                 {viewMode === "list" ? (
                   <QueueListIcon className="w-6 h-6" />
@@ -208,11 +216,11 @@ const DashboardPage: React.FC = () => {
                 className="w-64 h-64 rounded-full"
               />
               <h2 className="text-2xl font-semibold text-gray-500 mt-4">
-                Você não tem eventos :(
+                {t("You have no events :(")}
               </h2>
               <p className="text-gray-400 mt-2">
-                {evenType === "my" ? "Crie" : "Encontre"} seu primeiro evento e
-                comece a planejar algo incrível!
+                {evenType === "my" ? t("Create") : t("Find")}{" "}
+                {t("your first event and start planning something amazing!")}
               </p>
             </div>
           </div>
@@ -234,7 +242,7 @@ const DashboardPage: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
-        <h2 className="text-xl font-semibold mb-4">Criar Novo Evento</h2>
+        <h2 className="text-xl font-semibold mb-4">{t("Create New Event")}</h2>
         <EventForm onSubmit={handleCreateEvent} />
       </BottomSheet>
     </>
