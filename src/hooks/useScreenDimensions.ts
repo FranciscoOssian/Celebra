@@ -9,6 +9,8 @@ const useScreenDimensions = () => {
   });
 
   useEffect(() => {
+    if (!window) return;
+
     const handleResize = () => {
       setScreenDimensions({
         width: window.innerWidth,
@@ -16,9 +18,12 @@ const useScreenDimensions = () => {
       });
     };
 
-    window.addEventListener("resize", handleResize);
+    setScreenDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
 
-    // Limpeza do listener no desmontagem do componente
+    window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };

@@ -15,7 +15,9 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         onClick={toggleOpen}
         className="flex items-center justify-between w-full px-4 py-3 hover:bg-gray-100"
       >
-        <div className="text-lg font-medium text-gray-800">{question}</div>
+        <div className="text-lg font-medium text-gray-800 text-left">
+          {question}
+        </div>
         <div className="flex items-center">
           <svg
             className={`w-6 h-6 transform ${isOpen ? "rotate-180" : ""}`}
@@ -34,7 +36,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         </div>
       </button>
       {isOpen && (
-        <div className="px-4 py-2">
+        <div className="px-4 py-2 text-left">
           <p className="text-gray-600">{answer}</p>
         </div>
       )}
@@ -44,14 +46,14 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 function FAQ({ list }: { list: { question: string; answer: string }[] }) {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
       <h2 className="text-3xl font-bold mb-6 text-gray-800">FAQ</h2>
       <div>
         {list.map((item, i) => (
           <FAQItem key={i} question={item.question} answer={item.answer} />
         ))}
       </div>
-    </div>
+    </>
   );
 }
 

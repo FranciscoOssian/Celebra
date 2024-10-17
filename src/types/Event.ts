@@ -1,10 +1,10 @@
 export interface EventType {
   id: string;
+  about: string;
+  creatorId: string;
   name: string;
   date: string;
   location: string;
-  description: string;
-  guests: string[];
+  fileHero: string;
   createdAt: Date;
-  updatedAt: Date;
 }

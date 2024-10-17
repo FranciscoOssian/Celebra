@@ -1,6 +1,5 @@
-"use client";
-
 import Button from "@/components/common/Button";
+import InternalLayout from "@/components/layout/InternalLayout";
 import FAQ from "@/components/pages/home/Faq";
 import PriceCard from "@/components/pages/home/PriceCard";
 import { getTranslations, translations } from "@/services/translations";
@@ -14,7 +13,7 @@ export default function Home({ params: { lang } }: never) {
       {
         question: t(`What is Celebra?`),
         answer: t(
-          `Celebra is a SaaS platform designed to simplify the creation and management of events, initially focused on birthdays but with the potential to expand to other types of celebrations.`
+          `Celebra is a platform designed to simplify the creation and management of events.`
         ),
       },
       {
@@ -91,10 +90,12 @@ export default function Home({ params: { lang } }: never) {
         </Button>
       </div>
 
-      {/* FAQ Section */}
-      <section id="faq" className="my-20 w-full">
-        <FAQ list={faqs} />
-      </section>
+      <InternalLayout>
+        {/* FAQ Section */}
+        <section id="faq" className="!max-md:w-full">
+          <FAQ list={faqs} />
+        </section>
+      </InternalLayout>
 
       {/* Sign Up Section */}
       <div className="flex flex-col gap-4 my-20 justify-center items-center w-full h-[300px] bg-slate-100">
@@ -103,9 +104,9 @@ export default function Home({ params: { lang } }: never) {
       </div>
 
       {/* Pricing Section */}
-      <section
+      <InternalLayout
         id="pricing"
-        className="flex flex-wrap justify-center items-center gap-5 mb-10"
+        className="flex flex-wrap justify-around items-center mb-10"
       >
         <PriceCard
           product={t("month")}
@@ -117,7 +118,6 @@ export default function Home({ params: { lang } }: never) {
             t("Manage events"),
             t("Manage participants"),
           ]}
-          onClick={() => {}}
         />
         <PriceCard
           product={t("event")}
@@ -130,9 +130,8 @@ export default function Home({ params: { lang } }: never) {
             t("Manage events"),
             t("Manage participants"),
           ]}
-          onClick={() => {}}
         />
-      </section>
+      </InternalLayout>
     </div>
   );
 }

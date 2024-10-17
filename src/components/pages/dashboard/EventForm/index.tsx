@@ -131,7 +131,6 @@ export default function EventForm({
           </div>
         )}
       </div>
-
       <div className="flex justify-end items-end">
         <Button type="submit" className="w-32 h-6">
           {started && <ArrowPathIcon className="size-5 animate-spin" />}

@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/services/firebase/firebase";
+import { SubscriptionType } from "@/types/Subscription";
 import { EventType } from "@/types/Event";
 
-const useUserSubscriptions = (userId?: string) => {
-  const [subscriptions, setSubscriptions] = useState<EventType[]>([]);
+const useUserSubscriptions = (
+  userId: string,
+  listOfSubscriptions?: string[]
+) => {
+  const [subscriptions, setSubscriptions] = useState<
+    {
+      subscription: SubscriptionType;
+      event: EventType;
+    }[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userId) {
+    if (!userId || !listOfSubscriptions) {
       setSubscriptions([]);
       setLoading(false);
       return;
@@ -18,29 +27,43 @@ const useUserSubscriptions = (userId?: string) => {
     const fetchSubscriptions = async () => {
       setLoading(true);
       try {
-        const subscriptionsRef = collection(
-          db,
-          "Users",
-          userId,
-          "subscriptions"
-        );
-        const subscriptionSnapshots = await getDocs(subscriptionsRef);
+        // Função para buscar o snapshot de uma assinatura
+        const getSubscriptionSnapshot = async (
+          subId: string,
+          userId: string
+        ) => {
+          const docSnapshot = await getDoc(
+            doc(db, "Events", subId, "subscriptions", userId)
+          );
+          return { id: subId, docSnapshot }; // Retorna o subId junto com o snapshot
+        };
 
-        const eventIds = subscriptionSnapshots.docs.map((doc) => doc.id);
+        // Função para buscar dados de um evento
+        const getEventData = async (sub: SubscriptionType & { id: string }) => {
+          const docSnapshot = await getDoc(doc(db, "Events", sub.id));
+          return {
+            subscription: { ...sub },
+            event: { ...(docSnapshot.data() as EventType), id: sub.id },
+          };
+        };
 
-        // Buscar todos os eventos inscritos usando getDoc para cada ID
-        const subscribedEvents = await Promise.all(
-          eventIds.map((id) =>
-            getDoc(doc(db, "Events", id)).then((snap) =>
-              snap.exists()
-                ? ({ id: snap.id, ...snap.data() } as EventType)
-                : null
+        // Função principal para buscar as assinaturas e eventos
+        const subs = await Promise.all(
+          (
+            await Promise.all(
+              listOfSubscriptions?.map((subId) =>
+                getSubscriptionSnapshot(subId, userId)
+              ) ?? []
             )
           )
+            .map((item) => ({
+              ...(item.docSnapshot.data() as SubscriptionType),
+              id: item.id,
+            }))
+            .map((sub) => getEventData(sub))
         );
 
-        // Filtrar para garantir que só eventos existentes sejam incluídos
-        setSubscriptions(subscribedEvents.filter((event) => event !== null));
+        setSubscriptions(subs);
       } catch {
         setError("Erro ao buscar eventos subscritos.");
       } finally {
@@ -49,7 +72,7 @@ const useUserSubscriptions = (userId?: string) => {
     };
 
     fetchSubscriptions();
-  }, [userId]);
+  }, [listOfSubscriptions, userId]);
 
   return { subscriptions, loading, error };
 };

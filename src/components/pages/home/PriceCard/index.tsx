@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/common/Button";
 import { getTranslations, translations } from "@/services/translations";
 import { useParams } from "next/navigation";
 
@@ -7,7 +8,6 @@ interface PriceCardPropsType {
   title: string;
   price: number;
   benefits: string[];
-  onClick: () => void;
   monthly?: boolean;
   annual?: boolean;
   single?: boolean;
@@ -16,7 +16,7 @@ interface PriceCardPropsType {
 
 const SVG = () => (
   <svg
-    className="w-4 h-4 mr-2 fill-gray-700"
+    className="w-4 h-4 mr-2 fill-gray-700 flex-shrink-0"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
   >
@@ -31,7 +31,6 @@ export default function PriceCard({
   title,
   price,
   benefits,
-  onClick,
   monthly,
   annual,
   single,
@@ -60,7 +59,7 @@ export default function PriceCard({
             : product}
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mb-6">
         {benefits.map((benefit, i) => (
           <div key={i} className="flex items-center">
             <SVG />
@@ -68,12 +67,7 @@ export default function PriceCard({
           </div>
         ))}
       </div>
-      <button
-        onClick={onClick}
-        className="bg-gray-900 text-white px-4 py-2 rounded-md mt-4 hover:bg-gray-800"
-      >
-        {t("Get Started")}
-      </button>
+      <Button href="/auth/signup">{t("Get Started")}</Button>
     </div>
   );
 }

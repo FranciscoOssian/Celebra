@@ -10,7 +10,7 @@ import EventForm, {
 } from "@/components/pages/dashboard/EventForm";
 import Image from "next/image";
 import useDeviceType from "@/hooks/useDeviceType";
-import { app } from "@/services/firebase/firebase";
+import { analytics, app } from "@/services/firebase/firebase";
 import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
 import updateUser from "@/services/firebase/Update/user";
@@ -20,17 +20,21 @@ import SwitchSelection from "@/components/common/SwitchSelection";
 import { motion } from "framer-motion";
 import BottomSheet from "@/components/common/BottomSheet";
 import { getTranslations, translations } from "@/services/translations";
+import { logEvent } from "firebase/analytics";
 
 const auth = getAuth(app);
 
 const DashboardPage = ({ params: { lang } }: { params: { lang: string } }) => {
   const { user } = useUser();
+  const { subscriptions } = useUserSubscriptions(
+    user?.uid,
+    user?.subscriptions
+  );
   const { events: myEvents, deleteEvent } = useUserEvents(user?.events);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const deviceType = useDeviceType();
   const router = useRouter();
-  const { subscriptions } = useUserSubscriptions(user?.uid);
 
   const [items, setItems] = useState<string[]>([]);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -45,8 +49,8 @@ const DashboardPage = ({ params: { lang } }: { params: { lang: string } }) => {
       setEvents(myEvents);
       setItems(myEvents.map((e) => e.id));
     } else {
-      setEvents(subscriptions);
-      setItems(subscriptions.map((e) => e.id));
+      setEvents(subscriptions.map((sub) => sub.event));
+      setItems(subscriptions.map((sub) => sub.event.id));
     }
   }, [evenType, subscriptions, myEvents]);
 
@@ -98,6 +102,10 @@ const DashboardPage = ({ params: { lang } }: { params: { lang: string } }) => {
 
       if (result.success) {
         setIsModalOpen(false);
+        logEvent(analytics, "createEvent", {
+          userId: user.uid, // O ID do usuário autenticado
+          userEmail: user.email, // Ou outros dados que você queira acompanhar
+        });
         router.refresh();
       } else if (result.url) {
         setIsModalOpen(false);
@@ -235,13 +243,7 @@ const DashboardPage = ({ params: { lang } }: { params: { lang: string } }) => {
           onDelete={handleDelete}
         />
       </div>
-      <BottomSheet
-        className={`p-6 ${
-          deviceType === "desktop" || deviceType === "tablet" ? "!w-1/2" : ""
-        }`}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      >
+      <BottomSheet isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-xl font-semibold mb-4">{t("Create New Event")}</h2>
         <EventForm onSubmit={handleCreateEvent} />
       </BottomSheet>

@@ -22,5 +22,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/((?!_next).*)", // Match all paths except for internal Next.js paths
+  matcher: "/((?!_next|api).*)", // Match all paths except for internal Next.js paths and API routes
 };

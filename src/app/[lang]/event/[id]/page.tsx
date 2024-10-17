@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import Image from "next/image";
 import {
   ArrowPathIcon,
@@ -13,10 +13,8 @@ import Button from "@/components/common/Button";
 import { getAuth } from "firebase/auth";
 import useUserSubscription from "@/services/firebase/Hooks/useUserSubscription";
 import { formatDayMonth } from "@/utils/time";
-import useEvent from "@/services/firebase/Hooks/useEvent";
 import InternalLayout from "@/components/layout/InternalLayout";
 import { motion } from "framer-motion";
-import useDeviceType from "@/hooks/useDeviceType";
 import { getTranslations, translations } from "@/services/translations";
 
 const auth = getAuth();
@@ -68,13 +66,20 @@ const AnimatedCheck = () => {
 
 const EventPage = ({ params: { lang, id } }: never) => {
   const { user } = useUser();
-  const { event, loading, error, fileHero } = useEvent(id);
-  const { subscription, noSubscription } = useUserSubscription(user?.uid, id);
+  const {
+    subscription: sub,
+    loading,
+    error,
+  } = useUserSubscription(user?.uid, id);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amountForBuy, setAmountForBuy] = useState<number | "">("");
   const [isTrying, setIsTrying] = useState(false);
   const [showDone, setShowDone] = useState<boolean>(false);
-  const deviceType = useDeviceType();
+
+  const { event, subscription } = useMemo(
+    () => ({ event: sub?.event, subscription: sub?.subscription }),
+    [sub]
+  );
 
   const t = getTranslations(lang, translations);
 
@@ -113,24 +118,24 @@ const EventPage = ({ params: { lang, id } }: never) => {
   if (loading) return <div>{t("Loading")}...</div>;
   if (error)
     return <div>{t("Unable to load the event. Please try again.")}</div>;
-  if (!event?.exists()) return <div>{t("Event not found.")}</div>;
+  if (!event) return <div>{t("Event not found.")}</div>;
 
-  const eventData = event.data();
+  const eventData = event;
 
   return (
     <div className="flex flex-col justify-center items-center">
-      {fileHero && (
-        <div className="w-full h-52 md:w-[50%] relative flex justify-center items-center">
+      {eventData.fileHero.startsWith("http") && (
+        <div className="select-none w-full h-52 md:w-[50%] relative flex justify-center items-center">
           <div className="max-md:hidden absolute w-[100vw] h-52 opacity-30">
             <Image
-              src={fileHero}
+              src={eventData.fileHero}
               alt="Hero Image"
               layout="fill"
               objectFit="cover"
             />
           </div>
           <Image
-            src={fileHero}
+            src={eventData.fileHero}
             alt="Hero Image"
             layout="fill"
             objectFit="cover"
@@ -140,8 +145,7 @@ const EventPage = ({ params: { lang, id } }: never) => {
       <InternalLayout className="mt-5">
         {eventData.creatorId !== user?.uid && (
           <div className="w-full flex justify-end items-end">
-            <button
-              className="w-fit px-4 py-3 bg-black rounded-xl text-white"
+            <Button
               onClick={() => {
                 if (!user?.uid)
                   return alert(
@@ -154,8 +158,10 @@ const EventPage = ({ params: { lang, id } }: never) => {
                 });
               }}
             >
-              {t("Get tickets")}
-            </button>
+              {t(
+                `Get ${(subscription?.amount ?? 0) > 0 ? "more" : ""} tickets`
+              )}
+            </Button>
           </div>
         )}
         <h1 className="mt-5 text-3xl font-bold mb-4">{eventData.name}</h1>
@@ -178,16 +184,18 @@ const EventPage = ({ params: { lang, id } }: never) => {
           setShowDone(false);
         }}
         isOpen={isModalOpen}
-        className={`${
-          deviceType === "desktop" || deviceType === "tablet" ? "!w-1/2" : ""
-        }`}
       >
         {!showDone ? (
           <div className="w-full h-full flex flex-col justify-start items-center text-center">
             <h2 className="mt-5 text-xl font-bold mb-4 text-center">
-              {t("Get tickets for the event")}: {eventData.name}
+              {t(
+                `Get ${
+                  (subscription?.amount ?? 0) > 0 ? "more" : ""
+                } tickets for the event`
+              )}
+              : {eventData.name}
             </h2>
-            {!noSubscription && (
+            {(sub?.subscription.amount ?? 0) > 0 && (
               <div className="mb-4 text-justify px-11">
                 {t("You already have")} {subscription?.amount}{" "}
                 {t("purchased on")}{" "}

@@ -1,6 +1,11 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import {
+  initializeAnalytics,
+  getAnalytics,
+  isSupported,
+} from "firebase/analytics";
 
 // Suas configurações do Firebase
 const firebaseConfig = {
@@ -12,9 +17,16 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+const initialize = () => {
+  const app = initializeApp(firebaseConfig);
+  return app;
+};
+
 // Inicializar Firebase
-export const app = !getApps().length
-  ? initializeApp(firebaseConfig)
-  : getApps()[0];
+export const app = !getApps().length ? initialize() : getApps()[0];
 export const db = getFirestore(app);
+export const analytics = function () {
+  if (!window) return null;
+  else return getAnalytics(app);
+};
 export const storage = getStorage(app);

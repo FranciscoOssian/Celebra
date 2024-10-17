@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
     const userDoc = await userRef.get();
     const userData = userDoc.data();
 
-    // Check if user has sufficient balance
     const eventRef = admin
       .firestore()
       .collection("Events")
@@ -53,6 +52,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    // Check if user has sufficient balance
     if (
       (userData?.balance ?? 0) <
       (eventData?.priceUnit ?? 0) * parseInt(amount?.toString() ?? "0")
@@ -63,15 +63,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const subscriptionRef = admin
-      .firestore()
-      .collection("Users")
-      .doc(uid)
-      .collection("subscriptions")
-      .doc(eventId.toString());
-
+    // Create Subscription if not exist or update if exist (inside event for user see your subscription and creator manage)
+    const subscriptionRef = eventRef.collection("subscriptions").doc(uid);
     const subscriptionSnapshot = await subscriptionRef.get();
-
     if (subscriptionSnapshot.exists) {
       subscriptionRef.update({
         amount: admin.firestore.FieldValue.increment(
@@ -85,6 +79,13 @@ export async function POST(request: NextRequest) {
         purchasedAt: admin.firestore.FieldValue.serverTimestamp(),
       });
     }
+
+    // Save subscriptions events in user object to user can list your subscriptions
+    const currentSubs = (userData?.subscriptions as string[]) ?? [];
+    const currentSubsSet = new Set([...currentSubs, eventId.toString()]);
+    userRef.update({
+      subscriptions: Array.from(currentSubsSet),
+    });
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: unknown) {
