@@ -14,6 +14,7 @@ export default function Modal({
 }) {
   // Fechar o modal ao apertar 'Esc'
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const handleKeyDown = (e: { key: string }) => {
       if (e.key === "Escape") onClose();
     };

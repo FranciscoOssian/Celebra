@@ -9,19 +9,17 @@ const useScreenDimensions = () => {
   });
 
   useEffect(() => {
-    if (!window) return;
+    if (typeof window === "undefined") return;
 
     const handleResize = () => {
+      if (typeof window === "undefined") return;
       setScreenDimensions({
         width: window.innerWidth,
         height: window.innerHeight,
       });
     };
 
-    setScreenDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => {

@@ -10,7 +10,7 @@ import EventForm, {
 } from "@/components/pages/dashboard/EventForm";
 import Image from "next/image";
 import useDeviceType from "@/hooks/useDeviceType";
-import { analytics, app } from "@/services/firebase/firebase";
+import { app } from "@/services/firebase/firebase";
 import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
 import updateUser from "@/services/firebase/Update/user";
@@ -20,7 +20,6 @@ import SwitchSelection from "@/components/common/SwitchSelection";
 import { motion } from "framer-motion";
 import BottomSheet from "@/components/common/BottomSheet";
 import { getTranslations, translations } from "@/services/translations";
-import { logEvent } from "firebase/analytics";
 
 const auth = getAuth(app);
 
@@ -102,10 +101,12 @@ const DashboardPage = ({ params: { lang } }: { params: { lang: string } }) => {
 
       if (result.success) {
         setIsModalOpen(false);
-        logEvent(analytics, "createEvent", {
-          userId: user.uid, // O ID do usuário autenticado
-          userEmail: user.email, // Ou outros dados que você queira acompanhar
-        });
+
+        //if (analytics)
+        //  logEvent(analytics, "createEvent", {
+        //    userId: user.uid, // O ID do usuário autenticado
+        //    userEmail: user.email, // Ou outros dados que você queira acompanhar
+        //  });
         router.refresh();
       } else if (result.url) {
         setIsModalOpen(false);

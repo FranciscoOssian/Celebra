@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 const useDeviceType = () => {
@@ -11,6 +13,8 @@ const useDeviceType = () => {
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const handleResize = () => {
       setDeviceType(getDeviceType());
     };
