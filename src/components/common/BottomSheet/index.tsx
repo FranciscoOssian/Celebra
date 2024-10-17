@@ -28,7 +28,9 @@ const BottomSheet = ({
   );
 
   const classNameFinal = `rounded-2xl p-6 w-full bg-white h-[100vh] absolute right-0 top-0 shadow-[0px_-40px_50px_rgba(0,0,0,0.4)] ${
-    deviceType === "desktop" || deviceType === "tablet" ? "!w-1/2" : ""
+    deviceType === "desktop" || deviceType === "tablet"
+      ? "!w-1/2"
+      : "!top-[15%]"
   } ${className}`;
   return (
     <AnimatePresence>
