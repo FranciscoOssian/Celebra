@@ -5,8 +5,6 @@ import { useState } from "react";
 import Avatar from "@/components/common/Avatar";
 import useUser from "@/services/firebase/Hooks/useUser";
 import { useRouter } from "next/navigation";
-import { getAuth, signOut } from "firebase/auth";
-import { app } from "@/services/firebase/firebase";
 
 import { useParams } from "next/navigation";
 import { getTranslations, translations } from "@/services/translations";
@@ -92,7 +90,13 @@ const Menu = ({
             </div>
           )}
           <a
-            onClick={() => signOut(getAuth(app))}
+            onClick={() => {
+              import("@/services/firebase/firebase").then(({ app }) => {
+                import("firebase/auth").then(({ signOut, getAuth }) => {
+                  signOut(getAuth(app));
+                });
+              });
+            }}
             href="/"
             className="text-gray-700 mouse-pointer hover:text-[#00bfff]"
           >
