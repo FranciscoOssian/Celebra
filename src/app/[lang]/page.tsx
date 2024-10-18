@@ -1,5 +1,6 @@
 import Button from "@/components/common/Button";
 import InternalLayout from "@/components/layout/InternalLayout";
+import Hero from "@/components/pages/Hero";
 import FAQ from "@/components/pages/home/Faq";
 import PriceCard from "@/components/pages/home/PriceCard";
 import { getTranslations, translations } from "@/services/translations";
@@ -73,22 +74,7 @@ export default function Home({ params: { lang } }: never) {
   return (
     <div className="flex flex-col items-center">
       {/* Hero Section */}
-      <div className="my-20 flex flex-col justify-center items-center text-center pt-20">
-        <h2 className="text-[40px] font-bold tracking-tight text-[#001122]">
-          🎉{t("Celebra")}🎉
-        </h2>
-        <h2 className="mt-4 text-[24px] font-medium leading-[1.5em] text-[#888888] max-w-[400px] mx-auto">
-          {t(
-            "Celebra is the perfect solution for those who want to organize events in a simple and fun way. Come celebrate with us!"
-          )}
-        </h2>
-        <Button
-          href="/auth/signin"
-          className="mt-6 bg-[#00bfff] text-white rounded-md px-4 py-2 hover:bg-[#0099cc] transition duration-300"
-        >
-          {t("Get Started")}
-        </Button>
-      </div>
+      <Hero lang={lang} />
 
       <InternalLayout>
         {/* FAQ Section */}

@@ -10,6 +10,7 @@ import { app } from "@/services/firebase/firebase";
 
 import { useParams } from "next/navigation";
 import { getTranslations, translations } from "@/services/translations";
+import InternalLayout from "../InternalLayout";
 
 const Menu = ({
   className,
@@ -138,7 +139,7 @@ export default function Header() {
   };
 
   return (
-    <>
+    <InternalLayout>
       <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-10">
         <div className="container mx-auto flex justify-between items-center p-4">
           <div className="text-3xl font-bold text-[#001122]">
@@ -162,6 +163,6 @@ export default function Header() {
         />
       </header>
       <div className="h-[68px]"></div>
-    </>
+    </InternalLayout>
   );
 }

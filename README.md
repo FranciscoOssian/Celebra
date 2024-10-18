@@ -1,20 +1,35 @@
-# Celebra
+<h1 style="width: 100%; display: flex; justify-content: center; items-align: center;">🎉Celebra🎉</h1>
 
-Celebra é um projetado para facilitar a criação e o gerenciamento de eventos. O objetivo é oferecer uma plataforma intuitiva e prática que permita aos usuários organizarem suas celebrações de forma eficiente.
+> O **Celebra** é uma plataforma projetada para simplificar a criação e o gerenciamento de eventos, proporcionando uma experiência prática e intuitiva. Nosso objetivo é oferecer aos usuários uma ferramenta eficiente que torne a organização de celebrações fácil e divertida.
+> [https://celebra.foln.dev](https://celebra.foln.dev)
 
 ## Funcionalidades
 
-- [x] **Criação de Eventos**: Os usuários podem criar eventos facilmente através de um formulário simples. É possível incluir informações como nome do evento, data, horário, local e descrição.
+### Organizador
 
-- [ ] **Gerenciamento de Convidados**: A plataforma permite que os usuários adicionem convidados e gerenciem a lista de presença, com funcionalidades para acompanhar quem confirmou presença e quem não pôde comparecer.
+- [x] **Criação de Eventos**: Criação facilitada de eventos através de um formulário simples, com campos para nome, data, horário, local e descrição.
+- [ ] **Gerenciamento de Eventos**:
 
-- [ ] **Personalização de Convites**: Os convites podem ser personalizados para refletir o tema e a estética do evento. Isso inclui a opção de editar a página do evento, permitindo que os usuários adicionem imagens, textos e estilos de sua escolha.
+  - [ ] **Painel de Controle do Evento**: Visualização e edição centralizada das informações e detalhes do evento.
+  - [ ] **Gerenciamento de Convidados**: Ferramentas para adicionar, organizar e acompanhar os convidados.
+
+- [ ] **Ferramentas de Comunicação**
+
+  - [ ] **Mensagens para Convidados**: Envio de mensagens diretamente para os convidados.
+  - [ ] **Lembretes e Notificações Automáticas**: Sistema para garantir que os participantes estejam sempre atualizados.
+
+- [ ] **Análises e Relatórios**
+  - [ ] **Relatórios de Presença**: Acompanhamento da confirmação de presença dos convidados.
+  - [ ] **Feedback do Evento**: Coleta de avaliações e impressões após o evento.
+
+### Participante
+
+- [ ] **Personalização de Convites**: Convites customizáveis para refletir o estilo e tema do evento, incluindo a edição da página do evento com imagens, textos e estilos personalizados.
 
 - [ ] **Modelo de Monetização**:
 
-  - O serviço será oferecido em um modelo de pagamento por evento, eliminando a necessidade de mensalidades.
-  - Os usuários poderão criar até três eventos gratuitamente. Após isso, será cobrada uma taxa por evento criado, permitindo que o usuário escolha a quantidade de eventos a serem realizados conforme a sua necessidade.
+  - O Celebra oferece até três eventos gratuitos para todos os usuários. Após esse limite, uma taxa é cobrada por evento criado, eliminando a necessidade de mensalidades fixas e permitindo flexibilidade conforme a quantidade de eventos.
 
 ---
 
-Celebra é a solução perfeita para quem deseja organizar eventos de forma descomplicada e divertida. Venha celebrar com a gente!
+O Celebra é a solução perfeita para quem deseja organizar eventos de maneira descomplicada, eficiente e divertida. Venha celebrar com a gente!

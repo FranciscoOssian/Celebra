@@ -17,7 +17,7 @@ export default function InternalLayout({
       className={`w-full flex justify-center items-center ${className} ${parentClassName}`}
     >
       <div
-        className={`md:w-[60%] max-md:w-[90%] ${className} ${childrenClassName}`}
+        className={`md:max-w-[900px] md:w-[900px] max-md:min-w-[400px] max-md:w-[400px] ${className} ${childrenClassName}`}
       >
         {children}
       </div>
