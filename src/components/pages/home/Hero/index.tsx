@@ -1,6 +1,8 @@
 import Button from "@/components/common/Button";
+import Video from "@/components/common/Video";
 import InternalLayout from "@/components/layout/InternalLayout";
 import { getTranslations, translations } from "@/services/translations";
+import { base64 } from "./base64";
 
 export default function Hero({ lang }: { lang: string }) {
   const t = getTranslations(
@@ -13,19 +15,16 @@ export default function Hero({ lang }: { lang: string }) {
       <div className=" absolute top-0 w-full h-ful flex justify-center items-center">
         <div className="bg-black overflow-hidden rounded-b-xl">
           <div className="w-[805px] h-[454px]">
-            <video
+            <Video
               className={`w-[100%] h-[100%] opacity-60`}
               playsInline
-              autoPlay
               muted
               loop
-            >
-              <source
-                src="https://firebasestorage.googleapis.com/v0/b/celebra-edbb4.appspot.com/o/filesForCelebraSite%2F3188887-hd_1920_1080_25fps.mp4?alt=media&token=826677a8-78b6-489c-95be-cf1378c68c77"
-                type="video/mp4"
-              />
-              Your browser does not support the video tag.
-            </video>
+              autoPlay
+              disablePictureInPicture
+              poster={base64}
+              src="https://firebasestorage.googleapis.com/v0/b/celebra-edbb4.appspot.com/o/filesForCelebraSite%2Fhero.webm?alt=media&token=60353dee-5ab6-4746-9413-e24e512e8ac8"
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import Button from "@/components/common/Button";
 import InternalLayout from "@/components/layout/InternalLayout";
-import Hero from "@/components/pages/Hero";
+import Hero from "@/components/pages/home/Hero";
 import FAQ from "@/components/pages/home/Faq";
 import PriceCard from "@/components/pages/home/PriceCard";
 import { getTranslations, translations } from "@/services/translations";
