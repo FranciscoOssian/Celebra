@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { getTranslations, translations } from "@/services/translations";
 import InternalLayout from "../InternalLayout";
+import Link from "next/link";
 
 const Menu = ({
   className,
@@ -34,20 +35,20 @@ const Menu = ({
     <nav className={`flex justify-center items-center ${className}`}>
       {!isLoggedIn ? (
         <>
-          <a
+          <Link
             onClick={onClick}
             href="#faq"
             className="text-gray-700 hover:text-[#00bfff]"
           >
             FAQ
-          </a>
-          <a
+          </Link>
+          <Link
             onClick={onClick}
             href="#pricing"
             className="text-gray-700 hover:text-[#00bfff]"
           >
             {t("Pricing")}
-          </a>
+          </Link>
           <Button
             onClick={() => {
               router.push("/auth/signin");
@@ -69,27 +70,27 @@ const Menu = ({
         </>
       ) : (
         <>
-          <a
+          <Link
             onClick={onClick}
             href="/dashboard"
             className="text-gray-700 hover:text-[#00bfff]"
           >
             {t("My Events")}
-          </a>
-          <a
+          </Link>
+          <Link
             onClick={onClick}
             href="/account"
             className="text-gray-700 hover:text-[#00bfff]"
           >
             {t("Profile")}
-          </a>
+          </Link>
           {avatar && <Avatar alt="" size={40} src={avatar} />}
           {!avatar && (
             <div className="size-10 select-none bg-slate-800 rounded-full flex justify-center items-center">
               👤
             </div>
           )}
-          <a
+          <Link
             onClick={() => {
               import("@/services/firebase/firebase").then(({ app }) => {
                 import("firebase/auth").then(({ signOut, getAuth }) => {
@@ -101,7 +102,7 @@ const Menu = ({
             className="text-gray-700 mouse-pointer hover:text-[#00bfff]"
           >
             {t("Logout")}
-          </a>
+          </Link>
         </>
       )}
     </nav>
@@ -147,7 +148,7 @@ export default function Header() {
       <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-10">
         <div className="container mx-auto flex justify-between items-center p-4">
           <div className="text-3xl font-bold text-[#001122]">
-            <a href="/">Celebra</a>
+            <Link href="/">Celebra</Link>
           </div>
           <MenuButton toggleMenu={toggleMenu} />
           <Menu
