@@ -1,3 +1,4 @@
+import ShowTicketReceipt from "@/components/common/ShowTicketReceipt";
 import SubscribeButton from "@/components/common/SubscribeButton";
 import Header from "@/components/layout/Header";
 import InternalLayout from "@/components/layout/InternalLayout";
@@ -36,7 +37,10 @@ export const NormalPage = ({
           />
         </div>
         <InternalLayout className="mt-5 break-words">
-          <SubscribeButton eventId={event.id} />
+          <div className="flex flex-col gap-3">
+            <SubscribeButton eventId={event.id} />
+            <ShowTicketReceipt />
+          </div>
           <h1 className="mt-5 text-3xl font-bold mb-4">{event.name}</h1>
           <div className="flex text-lg mb-2">
             <ClockIcon className="size-7 mr-1" />

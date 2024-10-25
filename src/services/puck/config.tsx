@@ -11,6 +11,7 @@ import { PhotoIcon } from "@heroicons/react/24/outline";
 import Button from "@/components/common/Button";
 import { motion } from "framer-motion";
 import SubscribeButton from "@/components/common/SubscribeButton";
+import ShowTicketReceipt from "@/components/common/ShowTicketReceipt";
 
 const createMotionField = (label: string): any => ({
   label,
@@ -72,7 +73,7 @@ export const puckConfig = {
       title: "Layout",
     },
     ActionButtons: {
-      components: ["SubscribeButton"],
+      components: ["SubscribeButton", "ShowTicketReceipt"],
       defaultExpanded: true,
       title: "Action Buttons",
     },
@@ -369,9 +370,23 @@ export const puckConfig = {
       },
       render: ({ eventId, ...rest }: any) => {
         return (
-          <div {...getMotionProps(rest)}>
+          <motion.div {...getMotionProps(rest)}>
             <SubscribeButton eventId={eventId} />
-          </div>
+          </motion.div>
+        );
+      },
+    },
+
+    ShowTicketReceipt: {
+      label: "Show TicketReceipt Button",
+      fields: {
+        ...motionProps,
+      },
+      render: ({ ...rest }: any) => {
+        return (
+          <motion.div {...getMotionProps(rest)}>
+            <ShowTicketReceipt />
+          </motion.div>
         );
       },
     },

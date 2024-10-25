@@ -220,22 +220,23 @@ export default function SubscribeButton({ id }: { id: string }) {
 
             if (!auth.currentUser) {
               api.info({
-                message: `Precisa logar`,
+                message: t("Needs to log in"),
                 description: (
-                  <div>Você precisa está em uma conta para se inscrever</div>
+                  <div>
+                    {t("You need to be logged into an account to register.")}
+                  </div>
                 ),
                 placement: "topRight",
               });
 
-              return;
-            }
-
-            if (!user.uid) {
               router.push(
                 "/auth/signin?redirect=" +
                   encodeURIComponent(window.location.toString())
               );
+
+              return;
             }
+
             showModal();
           }}
         >
