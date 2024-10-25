@@ -4,7 +4,7 @@ import { EventType } from "@/types/Event";
 
 async function getEvent(id: string): Promise<EventType> {
   const response = await fetch(
-    `http://${process.env.NEXT_PUBLIC_DOMAIN}/api/get/event/${id}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_URL}/api/get/event/${id}`,
     { cache: "no-store" }
   );
   return response.json();

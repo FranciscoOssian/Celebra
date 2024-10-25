@@ -10,7 +10,7 @@ type Props = {
 
 async function getEvent(id: string): Promise<EventType> {
   const response = await fetch(
-    `http://${process.env.NEXT_PUBLIC_DOMAIN}/api/get/event/${id}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_URL}/api/get/event/${id}`,
     { next: { revalidate: 1200 } }
   );
   return response.json();
