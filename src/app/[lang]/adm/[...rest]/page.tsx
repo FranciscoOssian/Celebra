@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 
 const NotFound = () => {
-  const { id, lang } = useParams();
+  const { lang } = useParams();
   const t = getTranslations(
     typeof lang === "string" ? lang : lang[0],
     translations

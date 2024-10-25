@@ -44,6 +44,7 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
   useEffect(() => {
     if (initialValues) {
       const { date, time, fileHero, ...rest } = initialValues;
+      console.log(date, time);
       const formattedInitialValues = {
         ...rest,
       };

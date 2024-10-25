@@ -47,7 +47,7 @@ function RootLayout({
         })),
       },
     ],
-    [lang, subscriptions]
+    [lang, subscriptions, t]
   );
 
   const secondaryNavItems = useMemo(
@@ -68,7 +68,7 @@ function RootLayout({
         icon: <UserIcon className="size-4" />,
       },
     ],
-    [lang]
+    [lang, t]
   );
 
   return (
