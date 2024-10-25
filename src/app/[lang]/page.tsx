@@ -113,8 +113,8 @@ export default function Home({ params: { lang } }: never) {
           <PriceCard
             product={t("event")}
             single
-            title={t("Per event / under construction")}
-            price={2}
+            title={t("Per event")}
+            price={10}
             benefits={[
               t("Manage as many events as you want simultaneously"),
               t("Create events"),

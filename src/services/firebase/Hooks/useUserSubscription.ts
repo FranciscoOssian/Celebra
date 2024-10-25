@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db, storage } from "@/services/firebase/firebase";
+import { db } from "@/services/firebase/firebase";
 import { SubscriptionType } from "@/types/Subscription";
 import { EventType } from "@/types/Event";
-import { getDownloadURL } from "firebase/storage";
-import { ref } from "firebase/storage";
 
 const useUserSubscription = (userId: string, subscriptionId?: string) => {
   const [subscription, setSubscription] = useState<{
@@ -21,36 +19,14 @@ const useUserSubscription = (userId: string, subscriptionId?: string) => {
       return;
     }
 
-    const fetchFileHero = async (
-      sub: {
-        subscription: SubscriptionType;
-        event: EventType;
-      } | null
-    ) => {
-      const url = await getDownloadURL(
-        ref(storage, `Events/${sub?.event.id}/${sub?.event.fileHero}`)
-      );
-      const temp = { ...sub };
-      if (!temp.event) return;
-      temp.event.fileHero = url;
-      setSubscription(
-        temp as {
-          subscription: SubscriptionType;
-          event: EventType;
-        } | null
-      );
-    };
-
     const fetchSubscription = async () => {
       setLoading(true);
       try {
-        // Função para buscar o snapshot da assinatura
         const docSnapshot = await getDoc(
           doc(db, "Events", subscriptionId, "subscriptions", userId)
         );
         const subscriptionData = docSnapshot.data() as SubscriptionType;
 
-        // Função para buscar dados do evento
         const eventDoc = await getDoc(doc(db, "Events", subscriptionId));
         const eventData = eventDoc.data() as EventType;
 
@@ -60,7 +36,6 @@ const useUserSubscription = (userId: string, subscriptionId?: string) => {
         };
 
         setSubscription(resp);
-        fetchFileHero(resp);
       } catch {
         setError("Erro ao buscar evento subscrito.");
       } finally {

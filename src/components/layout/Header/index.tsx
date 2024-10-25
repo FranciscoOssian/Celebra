@@ -4,9 +4,7 @@ import Button from "@/components/common/Button";
 import { useState } from "react";
 import Avatar from "@/components/common/Avatar";
 import useUser from "@/services/firebase/Hooks/useUser";
-import { useRouter } from "next/navigation";
-
-import { useParams } from "next/navigation";
+import { usePathname, useParams, useRouter } from "next/navigation";
 import { getTranslations, translations } from "@/services/translations";
 import InternalLayout from "../InternalLayout";
 import Link from "next/link";
@@ -22,9 +20,9 @@ const Menu = ({
   isLoggedIn: boolean;
   avatar: string;
 }) => {
-  const router = useRouter();
-
   const { lang } = useParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const t = getTranslations(
     typeof lang === "string" ? lang : "en",
@@ -35,20 +33,25 @@ const Menu = ({
     <nav className={`flex justify-center items-center ${className}`}>
       {!isLoggedIn ? (
         <>
-          <Link
-            onClick={onClick}
-            href="#faq"
-            className="text-gray-700 hover:text-[#00bfff]"
-          >
-            FAQ
-          </Link>
-          <Link
-            onClick={onClick}
-            href="#pricing"
-            className="text-gray-700 hover:text-[#00bfff]"
-          >
-            {t("Pricing")}
-          </Link>
+          {!pathname.includes("event/") && (
+            <>
+              <Link
+                onClick={onClick}
+                href="#faq"
+                className="text-gray-700 hover:text-[#00bfff]"
+              >
+                FAQ
+              </Link>
+              <Link
+                onClick={onClick}
+                href="#pricing"
+                className="text-gray-700 hover:text-[#00bfff]"
+              >
+                {t("Pricing")}
+              </Link>
+            </>
+          )}
+
           <Button
             onClick={() => {
               router.push("/auth/signin");
@@ -72,7 +75,7 @@ const Menu = ({
         <>
           <Link
             onClick={onClick}
-            href="/dashboard"
+            href="/adm"
             className="text-gray-700 hover:text-[#00bfff]"
           >
             {t("My Events")}

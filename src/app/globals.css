@@ -4,3 +4,27 @@
 
 @layer utilities {
 }
+
+@layer components {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* Para Internet Explorer e Edge */
+    scrollbar-width: none; /* Para Firefox */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: #4a5568; /* Cor do "polegar" da barra de rolagem */
+    border-radius: 4px; /* Bordas arredondadas */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background-color: #edf2f7; /* Cor do fundo da barra de rolagem */
+  }
+}

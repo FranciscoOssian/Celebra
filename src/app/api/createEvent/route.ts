@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 
 // Constants
 const MAX_FREE_EVENTS = 3;
-const EVENT_PRICE_CENTS = 200; // R$2 in cents
+const EVENT_PRICE_CENTS = 1000; // R$10 in cents
 const STORAGE_BUCKET = "gs://celebra-edbb4.appspot.com";
 const CURRENCY = "brl";
 
@@ -91,6 +91,8 @@ const parseFormData = async (request: NextRequest) => {
  * @returns The Stripe session URL.
  */
 const createStripeSession = async (uid: string): Promise<string> => {
+  console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/adm?payment=success`);
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -110,8 +112,8 @@ const createStripeSession = async (uid: string): Promise<string> => {
     metadata: {
       firebaseId: uid,
     },
-    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard?payment=success`,
-    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard?payment=cancel`,
+    success_url: `https://${process.env.NEXT_PUBLIC_BASE_URL}/adm?payment=success`,
+    cancel_url: `https://${process.env.NEXT_PUBLIC_BASE_URL}/adm?payment=cancel`,
   });
 
   return session.url ?? "";
@@ -178,7 +180,7 @@ export async function POST(request: NextRequest) {
         {
           success: true,
           message: "Event created successfully.",
-          id: newEventDocRef.id,
+          event: { id: newEventDocRef.id, ...eventData },
         },
         { status: 200 }
       );

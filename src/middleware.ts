@@ -3,7 +3,7 @@ import { getBestLanguageFromHeaders } from "./services/translations/getBestLangu
 import { supportedLanguages } from "./services/translations";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   if (
     supportedLanguages.some(
@@ -15,8 +15,7 @@ export function middleware(request: NextRequest) {
   }
 
   const locale = getBestLanguageFromHeaders();
-
-  const redirectUrl = new URL(`/${locale}${pathname}`, request.url);
+  const redirectUrl = new URL(`/${locale}${pathname}${search}`, request.url);
 
   return NextResponse.redirect(redirectUrl);
 }

@@ -6,19 +6,26 @@ import { FcGoogle } from "react-icons/fc";
 import useUser from "@/services/firebase/Hooks/useUser";
 import { useRouter } from "next/navigation";
 import { app } from "@/services/firebase/firebase";
+import { useSearchParams } from "next/navigation";
 import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { getTranslations, translations } from "@/services/translations";
+import { doesDocExist } from "@/services/firebase/utils";
+import createEmptyDoc from "@/services/firebase/Create/emptyDoc";
 
 export default function SignInPage({ params: { lang } }: never) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailRegisterVisible, setIsEmailRegisterVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  const redirectTo = searchParams.get("redirect");
 
   const router = useRouter();
 
@@ -27,14 +34,24 @@ export default function SignInPage({ params: { lang } }: never) {
   const t = getTranslations(lang, translations);
 
   useEffect(() => {
-    if (user?.uid) router.push("/dashboard");
-  }, [user, router]);
+    if (user?.uid && !redirectTo) router.push("/adm");
+    if (user?.uid && redirectTo) router.push(redirectTo);
+  }, [user, router, redirectTo]);
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(getAuth(app), email, password);
+      const credential = await signInWithEmailAndPassword(
+        getAuth(app),
+        email,
+        password
+      );
+
+      if (!(await doesDocExist("Users", credential.user.uid))) {
+        await createEmptyDoc("Users", credential.user.uid);
+      }
+      signOut(getAuth(app));
     } catch (error) {
       alert(error);
       console.error("Error. user:", error);
@@ -46,7 +63,13 @@ export default function SignInPage({ params: { lang } }: never) {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      await signInWithPopup(getAuth(app), new GoogleAuthProvider());
+      const credential = await signInWithPopup(
+        getAuth(app),
+        new GoogleAuthProvider()
+      );
+      if (!(await doesDocExist("Users", credential.user.uid))) {
+        await createEmptyDoc("Users", credential.user.uid);
+      }
     } catch (error) {
       alert(error);
       console.error("Error. user with Google:", error);

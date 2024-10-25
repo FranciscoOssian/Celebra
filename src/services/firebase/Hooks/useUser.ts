@@ -8,7 +8,7 @@ import { UserType } from "@/types/user";
 
 const auth = getAuth(app);
 
-type User = U & UserType;
+export type User = U & UserType;
 
 const useUser = () => {
   const [user, loading, error] = useAuthState(auth);

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import useUser from "@/services/firebase/Hooks/useUser";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import createUser, { CreateUserType } from "@/services/firebase/Create/user";
 import { AuthErrorCodes } from "firebase/auth";
 import { getTranslations, translations } from "@/services/translations";
@@ -14,6 +14,9 @@ export default function SignUpPage({ params: { lang } }: never) {
   const [password, setPassword] = useState("");
   const [isEmailRegisterVisible, setIsEmailRegisterVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  const redirectTo = searchParams.get("redirect");
 
   const router = useRouter();
 
@@ -22,8 +25,9 @@ export default function SignUpPage({ params: { lang } }: never) {
   const t = getTranslations(lang, translations);
 
   useEffect(() => {
-    if (user?.uid) router.push("/dashboard");
-  }, [user, router]);
+    if (user?.uid && !redirectTo) router.push("/adm");
+    if (redirectTo) router.push(redirectTo);
+  }, [user, router, redirectTo]);
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
