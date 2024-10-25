@@ -28,7 +28,7 @@ export default function Button({
   loading?: boolean;
   LoadingComponent?: React.ReactNode;
 }) {
-  const baseClasses = `text-white select-none w-fit text-[14px] p-2 px-4 flex justify-center items-center rounded-lg h-[36px] font-semibold text-center bg-slate-950 ${className}`;
+  const baseClasses = `text-white select-none w-fit text-[14px] p-2 px-4 flex justify-center items-center rounded-lg max-h-[200px] min-h-fit font-semibold text-center bg-slate-950 ${className}`;
   const disabledClasses = disable ? "bg-slate-700 cursor-not-allowed" : "";
 
   const loadingIndicator = loading ? (

@@ -33,8 +33,6 @@ export default function Page() {
     translations
   );
 
-  console.log(id, lang);
-
   const router = useRouter();
   const resp = useMemo(
     () => subscriptions.find((e) => e.event.id === id),
@@ -97,8 +95,8 @@ export default function Page() {
         <p>{modalText}</p>
       </Modal>
 
-      <div className="w-full flex">
-        <div className="w-[40%] pr-4 flex flex-col gap-6">
+      <div className="w-full max-md:min-w-full flex max-md:flex-col max-md:justify-center max-md:items-center">
+        <div className="w-[40%] max-md:w-full pr-4 flex flex-col gap-6">
           <Card className="shadow-lg !bg-slate-100">
             <Title level={5}>{t("Event Status")}</Title>
             <Progress percent={event?.usePuck ? 100 : 50} />
@@ -112,7 +110,7 @@ export default function Page() {
               )}
             </Text>
 
-            <div className="w-full flex justify-end items-end mt-3 gap-3">
+            <div className="w-full flex max-md:flex-col justify-end items-end mt-3 gap-3">
               <Button
                 className="!bg-white !text-black !border"
                 onClick={handleOpen}
@@ -143,7 +141,7 @@ export default function Page() {
           </Card>
         </div>
 
-        <div className="w-[60%] pl-4">
+        <div className="w-[60%] max-md:w-full md:pl-4 max-md:mt-6">
           <div>
             <Card className="shadow-lg !bg-slate-100">
               <Title level={4}>{t("Exclusive Event Customization")}</Title>
