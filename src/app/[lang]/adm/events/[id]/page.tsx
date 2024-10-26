@@ -134,7 +134,9 @@ export default function Page() {
 
           <Card className="shadow-lg !bg-slate-100 !w-full">
             <div className="flex flex-wrap justify-end items-end gap-5">
-              <Button onClick={() => router.push(`/event/${event?.id}`)}>
+              <Button
+                onClick={() => router.push(`/event/${event?.id}/preview`)}
+              >
                 {t("View event page")}
               </Button>
             </div>
