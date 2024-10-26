@@ -73,7 +73,7 @@ const App: React.FC = () => {
         ),
       },
     ],
-    [onHandleDeleteEvent, lang, t]
+    [onHandleDeleteEvent, t]
   );
 
   return (

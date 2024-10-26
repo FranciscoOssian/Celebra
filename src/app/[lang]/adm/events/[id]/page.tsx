@@ -52,15 +52,19 @@ export default function Page() {
     if (!event) return;
     if (event?.usePuck) {
       setModalText(
-        "Opa, quer voltar à página tradicional? Tudo bem! Sua página personalizada ficará guardada e pode ser usada novamente dentro desse evento."
+        t(
+          "Hey, do you want to return to the traditional page? No problem! Your customized page will be saved and can be used again within this event."
+        )
       );
     } else {
       setModalText(
-        "Isso irá definir que seu evento deve ser carregado de forma especial, mas você pode alterar isso depois. Você não perderá sua página atual, mas terá que construir uma."
+        t(
+          "This will set your event to be loaded in a special way, but you can change it later. You will not lose your current page, but you will have to build a new one."
+        )
       );
     }
     setOpen(true);
-  }, [event]);
+  }, [event, t]);
 
   const handleOk = useCallback(async () => {
     setConfirmLoading(true);
@@ -86,7 +90,7 @@ export default function Page() {
   return (
     <div className="ml-5 mt-5">
       <Modal
-        title="Gerenciar Exibição do Evento"
+        title={t("Manage Event Display")}
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
@@ -133,10 +137,6 @@ export default function Page() {
               <Button onClick={() => router.push(`/event/${event?.id}`)}>
                 {t("View event page")}
               </Button>
-
-              <Button onClick={() => router.push(`/event/${event?.id}/edit`)}>
-                {t("Edit event information")}
-              </Button>
             </div>
           </Card>
         </div>
@@ -177,12 +177,19 @@ export default function Page() {
               <Statistic
                 title={t("Total Guests reached")}
                 value={
-                  subscriptions
-                    .find((item) => item.event.id === id)
-                    ?.subscriptions.reduce(
-                      (acc, subscription) => acc + subscription.amount,
-                      0
-                    ) || 0
+                  subscriptions.find((item) => item.event.id === id)
+                    ?.subscriptions &&
+                  Array.isArray(
+                    subscriptions.find((item) => item.event.id === id)
+                      ?.subscriptions
+                  )
+                    ? subscriptions
+                        .find((item) => item.event.id === id)
+                        ?.subscriptions.reduce(
+                          (acc, subscription) => acc + subscription.amount,
+                          0
+                        )
+                    : 0
                 }
                 prefix={<UserOutlined />}
               />
@@ -202,12 +209,18 @@ export default function Page() {
               const { name, description, date, time, location, fileHero } =
                 values;
 
+              console.log(fileHero);
+
               const uri = await createFileEvent(
                 typeof id === "string" ? id : id[0],
                 fileHero
               );
 
-              if (!uri) return;
+              let imageUri = event?.fileHero;
+
+              if (uri) {
+                imageUri = uri;
+              }
 
               updateEvent(typeof id === "string" ? id : id[0], {
                 name,
@@ -215,7 +228,7 @@ export default function Page() {
                 date: new Date(date).toISOString(),
                 time: new Date(time).toISOString(),
                 location,
-                fileHero: uri,
+                fileHero: imageUri,
               });
 
               deleteEventFile(event?.fileHero ?? "");

@@ -144,6 +144,27 @@
     "Guest ratio per event": "Proporção de convidados por evento",
     "Upcoming Events": "Próximos Eventos",
     "Event": "Evento",
-    "Date": "Data"
+    "Date": "Data",
+
+    "Click to upload": "Clique para fazer upload",
+    "Event Name": "Nome do Evento",
+    "Please enter the event name": "Por favor insira o nome do evento",
+    "Eg: Birthday Party": "Ex: Festa de Aniversário",
+    "Event Date": "Data do Evento",
+    "Please select the event date": "Por favor selecione a data do evento",
+    "Select the date": "Selecione a data",
+    "Event Time": "Horário do Evento",
+    "Please select the event time": "Por favor selecione o horário do evento",
+    "Select the time": "Selecione o horário",
+    "Event Location": "Local do Evento",
+    "Please enter the event location": "Por favor insira o local do evento",
+    "Eg: Rua das Flores, 123": "Ex: Rua das Flores, 123",
+    "Event Description": "Descrição do Evento",
+    "Describe the event here...": "Descreva o evento aqui...",
+    "Edit event": "Editar evento",
+    "Event Image (Hero)": "Imagem do Evento (Hero)",
+    "Hey, do you want to return to the traditional page? No problem! Your customized page will be saved and can be used again within this event.": "Opa, quer voltar à página tradicional? Tudo bem! Sua página personalizada ficará guardada e pode ser usada novamente dentro desse evento.",
+    "Manage Event Display": "Gerenciar Exibição do Evento",
+    "This will set your event to be loaded in a special way, but you can change it later. You will not lose your current page, but you will have to build a new one.": "Isso irá definir que seu evento deve ser carregado de forma especial, mas você pode alterar isso depois. Você não perderá sua página atual, mas terá que construir uma."
   }
 }

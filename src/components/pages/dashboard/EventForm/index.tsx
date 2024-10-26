@@ -20,6 +20,8 @@ import Button from "@/components/common/Button";
 import { getBase64 } from "@/utils";
 import { EventType } from "@/types/Event";
 import dayjs from "dayjs";
+import { useParams } from "next/navigation";
+import { getTranslations, translations } from "@/services/translations";
 
 export type EventFormType = Omit<
   EventType,
@@ -40,6 +42,12 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState<boolean>(false);
+
+  const { lang } = useParams();
+  const t = getTranslations(
+    typeof lang === "string" ? lang : lang[0],
+    translations
+  );
 
   useEffect(() => {
     if (initialValues) {
@@ -103,7 +111,7 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
       )}
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         {/* Upload da Imagem Hero do Evento */}
-        <Form.Item label="Imagem do Evento (Hero)" valuePropName="fileList">
+        <Form.Item label={t("Event Image (Hero)")} valuePropName="fileList">
           <Upload
             name="hero"
             listType="picture-card"
@@ -117,7 +125,7 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
             {fileList.length >= 1 ? null : (
               <div>
                 <UploadOutlined />
-                <p className="mt-2">Clique para fazer upload</p>
+                <p className="mt-2">{t("Click to upload")}</p>
               </div>
             )}
           </Upload>
@@ -133,20 +141,20 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
         >
           <Input
             prefix={<FileTextOutlined />}
-            placeholder="Ex: Festa de Aniversário"
+            placeholder={t("Eg: Birthday Party")}
           />
         </Form.Item>
 
         <Form.Item
           name="date"
           initialValue={dayjs(initialValues?.date)}
-          label="Data do Evento"
+          label={t("Event Date")}
           rules={
             !initialValues?.date
               ? [
                   {
                     required: true,
-                    message: "Por favor selecione a data do evento",
+                    message: t("Please select the event date"),
                   },
                 ]
               : []
@@ -155,20 +163,20 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
           <DatePicker
             defaultValue={dayjs(initialValues?.date)}
             className="w-full"
-            placeholder="Selecione a data"
+            placeholder={t("Select the date")}
           />
         </Form.Item>
 
         <Form.Item
           name="time"
-          label="Horário do Evento"
+          label={t("Event Time")}
           initialValue={dayjs(initialValues?.time)}
           rules={
             !initialValues?.time
               ? [
                   {
                     required: true,
-                    message: "Por favor selecione o horário do evento",
+                    message: t("Please select the event time"),
                   },
                 ]
               : []
@@ -177,30 +185,33 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit }) => {
           <TimePicker
             defaultValue={dayjs(initialValues?.time)}
             className="w-full"
-            placeholder="Selecione o horário"
+            placeholder={t("Select the time")}
           />
         </Form.Item>
 
         <Form.Item
           name="location"
-          label="Local do Evento"
+          label={t("Event Location")}
           rules={[
-            { required: true, message: "Por favor insira o local do evento" },
+            { required: true, message: t("Please enter the event location") },
           ]}
         >
           <Input
             prefix={<EnvironmentOutlined />}
-            placeholder="Ex: Rua das Flores, 123"
+            placeholder={t("Eg: Rua das Flores, 123")}
           />
         </Form.Item>
 
-        <Form.Item name="description" label="Descrição do Evento">
-          <Input.TextArea rows={4} placeholder="Descreva o evento aqui..." />
+        <Form.Item name="description" label={t("Event Description")}>
+          <Input.TextArea
+            rows={4}
+            placeholder={t("Describe the event here...")}
+          />
         </Form.Item>
 
         <Form.Item>
           <Button done={done} type="submit" loading={loading}>
-            {initialValues ? "Editar evento" : "Criar Evento"}
+            {initialValues ? t("Edit Event") : t("Create Event")}
           </Button>
         </Form.Item>
       </Form>
