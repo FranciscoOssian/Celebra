@@ -55,9 +55,7 @@ export default function Editor() {
   return (
     <>
       {contextHolder}
-      {state.content.length > 0 && (
-        <Puck config={config} data={state} onPublish={save} />
-      )}
+      <Puck config={config} data={state} onPublish={save} />
     </>
   );
 }
