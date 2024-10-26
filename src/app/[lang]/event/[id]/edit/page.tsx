@@ -57,7 +57,7 @@ export default function Editor() {
   return (
     <>
       {contextHolder}
-      {state.content.length > 0 && (
+      {state.root.tiitle !== "initialDataTitle" && (
         <Puck config={config} data={state} onPublish={save} />
       )}
     </>

@@ -48,7 +48,7 @@ export const initialData = {
   blocks: [],
   root: {
     props: {
-      title: "",
+      title: "initialDataTitle",
     },
   },
   content: [],
