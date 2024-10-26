@@ -2,6 +2,8 @@ import { NormalPage } from "@/components/pages/event/Normal";
 import { PuckPage } from "@/components/pages/event/Puck";
 import { EventType } from "@/types/Event";
 
+export const dynamic = "force-dynamic";
+
 async function getEvent(id: string): Promise<EventType> {
   const response = await fetch(
     `http://${process.env.NEXT_PUBLIC_BASE_URL}/api/get/event/${id}`,

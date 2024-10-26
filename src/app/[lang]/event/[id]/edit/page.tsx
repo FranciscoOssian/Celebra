@@ -17,6 +17,8 @@ type NotificationPlacement = NotificationArgsProps["placement"];
 
 const auth = getAuth(app);
 
+export const dynamic = "force-dynamic";
+
 export default function Editor() {
   const { id } = useParams();
   const router = useRouter();
@@ -31,7 +33,7 @@ export default function Editor() {
   const openNotification = () => {
     const placement: NotificationPlacement = "topRight";
     api.info({
-      message: `Salvo`,
+      message: `Saved`,
       description: "Your project has been saved!",
       placement,
       btn: (
@@ -55,7 +57,9 @@ export default function Editor() {
   return (
     <>
       {contextHolder}
-      <Puck config={config} data={state} onPublish={save} />
+      {state.content.length > 0 && (
+        <Puck config={config} data={state} onPublish={save} />
+      )}
     </>
   );
 }
