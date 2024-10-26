@@ -41,7 +41,7 @@ export default function Editor() {
           type="primary"
           onClick={() => router.push(`/event/${id}/preview`)}
         >
-          Visitar sua página
+          Go to your website
         </Button>
       ),
     });
@@ -57,9 +57,7 @@ export default function Editor() {
   return (
     <>
       {contextHolder}
-      {state.root.tiitle !== "initialDataTitle" && (
-        <Puck config={config} data={state} onPublish={save} />
-      )}
+      {event && <Puck config={config} data={state} onPublish={save} />}
     </>
   );
 }
