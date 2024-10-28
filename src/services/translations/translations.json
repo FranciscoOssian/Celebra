@@ -1,9 +1,9 @@
 {
   "pt-BR": {
-    "Celebra is the perfect solution for those who want to organize events in a simple and fun way. Come celebrate with us!": "Celebra é a solução perfeita para quem deseja organizar eventos de forma descomplicada e divertida. Venha celebrar com a gente!",
+    "Manage events and create beautiful web pages for them.": "Gerencie eventos e crie páginas lindas para eles.",
     "Celebra operates on a pay-per-event model, eliminating monthly fees. You only pay for the events you create.": "O Celebra opera em um modelo de pagamento por evento, eliminando taxas mensais. Você só paga pelos eventos que criar.",
     "Celebra - Organize your events easily": "Celebra - Organize seus eventos de forma fácil",
-    "Celebra is a platform designed to simplify the creation and management of events.": "Celebra é uma plataforma SaaS projetada para simplificar a criação e o gerenciamento de eventos.",
+    "Celebra is a platform designed to streamline the event management process, making it easy for organizers to create memorable experiences.": "Celebra é uma plataforma projetada para simplificar o processo de gerenciamento de eventos, facilitando a criação de experiências memoráveis para os organizadores.",
 
     "What is Celebra?": "O que é o Celebra?",
     "How can I create an event on Celebra?": "Como posso criar um evento no Celebra?",
@@ -15,12 +15,29 @@
     "How can I contact for more information?": "Como posso entrar em contato para mais informações?",
 
     "To create an event, simply access the platform and fill out a simple form with the event details, such as name, date, time, location, and description.": "Para criar um evento, basta acessar a plataforma e preencher um formulário simples com os detalhes do evento, como nome, data, hora, localização e descrição.",
-    "Yes, you can create up to three events for free. After that, a fee will be charged for each event created.": "Sim, você pode criar até três eventos gratuitamente. Após isso, uma taxa será cobrada para cada evento criado.",
+    "Yes, with our free plan, you can manage up to 3 events simultaneously at no cost.": "Sim, com nosso plano gratuito, você pode gerenciar até 3 eventos simultaneamente sem custo.",
     "The platform allows you to add guests and manage the attendance list. You can track who confirmed attendance and who could not make it.": "A plataforma permite que você adicione convidados e gerencie a lista de presença. Você pode acompanhar quem confirmou presença e quem não pôde comparecer.",
     "Yes! Invitations can be customized to reflect the theme of your event. You can add images, text, and styles to the event page.": "Sim! Os convites podem ser personalizados para refletir o tema do seu evento. Você pode adicionar imagens, textos e estilos à página do evento.",
-    "Payments are processed through integration with Stripe, ensuring a secure and efficient experience for paid events.": "Os pagamentos são processados através da integração com o Stripe, garantindo uma experiência segura e eficiente para eventos pagos.",
+    "Payments are processed securely through our platform, allowing you to focus on your event rather than on logistics.": "Os pagamentos são processados com segurança pela nossa plataforma, permitindo que você se concentre no seu evento em vez da logística.",
     "Yes, Celebra's design is responsive and adaptable to different devices, allowing event creation anywhere and anytime.": "Sim, o design do Celebra é responsivo e adaptável a diferentes dispositivos, permitindo a criação de eventos em qualquer lugar e a qualquer hora.",
     "For more information, you can access the contact section on the platform or send an email to our support team.": "Para mais informações, você pode acessar a seção de contato na plataforma ou enviar um e-mail para nossa equipe de suporte.",
+
+    "With Celebra you": "Com Celebra você",
+
+    "Simplify your event organization": "Simplifica sua organização",
+    "You can manage all aspects of your event in one place, saving time and reducing your workload.": "Você pode gerenciar todos os aspectos do seu evento em um só lugar, economizando tempo e reduzindo a carga de trabalho.",
+
+    "Boost your productivity": "Aumenta sua produtividade",
+    "The platform provides ready-made templates and resources, allowing you to focus on what really matters: delivering an amazing experience for attendees.": "A plataforma oferece templates e recursos prontos, permitindo que você se concentre no que realmente importa: proporcionar uma experiência incrível para os participantes.",
+
+    "Customize event pages": "Personaliza a página dos Eventos",
+    "Create personalized event sites that reflect your brand, ensuring your guests experience the uniqueness of your celebration.": "Crie sites de eventos personalizados que refletem a sua marca, garantindo que seus convidados sintam a singularidade de sua celebração.",
+
+    "Efficiently manage participants": "Gerencia Eficientemente os Participantes",
+    "Easily track RSVP and guest interactions, making it easy to engage before, during, and after the event.": "Monitore facilmente o RSVP e as interações dos convidados, facilitando o contato e o engajamento antes, durante e após o evento.",
+
+    "Access from anywhere": "Acessa em Qualquer Lugar",
+    "The platform is mobile-optimized, allowing you to manage your events anytime, anywhere.": "A plataforma é otimizada para dispositivos móveis, permitindo que você gerencie seus eventos de qualquer lugar, a qualquer hora.",
 
     "About": "Sobre",
     "Close": "Fechar",

@@ -31,12 +31,10 @@ export default function Hero({ lang }: { lang: string }) {
       <InternalLayout className="z-10 text-white">
         <div className="flex flex-col justify-center items-center">
           <h2 className="text-[40px] font-bold tracking-tight">
-            🎉{t("Celebra")}🎉
+            {t("Celebra")}
           </h2>
           <h2 className="mt-4 text-[24px] font-medium leading-[1.5em] max-w-[400px] mx-auto">
-            {t(
-              "Celebra is the perfect solution for those who want to organize events in a simple and fun way. Come celebrate with us!"
-            )}
+            {t("Manage events and create beautiful web pages for them.")}
           </h2>
           <Button
             href="/auth/signin"
