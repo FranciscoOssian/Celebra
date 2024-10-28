@@ -183,7 +183,7 @@ export default function Home({ params: { lang } }: never) {
       </div>
       <footer className="w-full h-20 font-extralight bg-slate-200 flex justify-between items-center">
         <InternalLayout>
-          <div>© Celebra Inc. 2023</div>
+          <div>© Celebra Inc. {new Date().getFullYear()}</div>
           <div></div>
         </InternalLayout>
       </footer>
